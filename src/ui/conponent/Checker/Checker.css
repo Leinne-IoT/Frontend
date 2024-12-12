@@ -1,0 +1,13 @@
+.checker{
+    cursor: pointer;
+    transition: all .1s ease-in;
+}
+
+.checker:hover{
+    background: rgba(0, 0, 0, 0.28) !important;
+}
+
+.checker-table{
+    width: calc(100% - 1.5rem); /* 부모 너비에서 margin만큼 뺌 */
+    margin: 0.75rem; /* m-2에 해당하는 Bootstrap margin */
+}

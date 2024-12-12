@@ -1,0 +1,31 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+
+    width: 260px;
+    height: 100vh;
+    padding: 20px;
+    background-color: #f4f4f4;
+
+    top: 0;
+    left: 0;
+    position: absolute; /* 레이아웃 흐름에서 제외 */
+
+    transform: translateX(0); /* 기본 위치 */
+    transition: transform 0.25s ease; /* 부드러운 애니메이션 */
+}
+
+.sidebar.closed {
+    transform: translateX(-100%);
+}
+
+.sidebar-button {
+    height: 40px;
+    cursor: pointer;
+    align-content: center;
+    transition: background 0.25s ease;
+}
+
+.sidebar-button:hover {
+    background: #f4f4f4;
+}
