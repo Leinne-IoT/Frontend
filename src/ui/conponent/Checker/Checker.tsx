@@ -9,21 +9,14 @@ export interface CheckerDevice{
     open: boolean; // 열림/닫힘 여부
     battery: number; // 잔여 배터리량
     date: Date; // 가장 최근 날짜
+    number?: number; // history number 입니다. 없다면 대시보드 위젯입니다
 }
 
 interface Props {
     device: CheckerDevice;
-    number?: number;
 }
 
-/**
- * 체커 컴포넌트
- *
- * @param device
- * @param number 테이블상의 No값을 의미합니다, 없다면 대시보드 위젯입니다
- * @constructor
- */
-const Checker: React.FC<Props> = ({device, number}) => {
+const Checker: React.FC<Props> = ({device}) => {
     const [modal, setModal] = useState(false);
 
     let battery = device.battery + '';
@@ -36,9 +29,9 @@ const Checker: React.FC<Props> = ({device, number}) => {
     const onClick = () => setModal(true);
 
     return <>
-        {!number && <CheckerInfoModal visibility={modal} setVisibility={setModal} device={device}/>}
-        <tr className={number ? "" : "checker"} onClick={number ? undefined : onClick}>
-            {number && <td className="text-center">{number}</td>}
+        {!device.number && <CheckerInfoModal visibility={modal} setVisibility={setModal} device={device}/>}
+        <tr className={device.number ? "" : "checker"} onClick={device.number ? undefined : onClick}>
+            {device.number && <td className="text-center">{device.number}</td>}
             <td className="text-center">{device.name}</td>
             <td className="text-center">{device.open ? '열림' : '닫힘'}</td>
             <td className="text-center">{battery}</td>
