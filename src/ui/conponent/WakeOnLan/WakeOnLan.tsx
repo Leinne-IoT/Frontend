@@ -13,10 +13,11 @@ interface PC{
 
 interface Props{
     data: PC;
-    checked?: boolean;
+    checked: boolean;
+    onChange: () => any;
 }
 
-const WakeOnLan: React.FC<Props> = ({data}) => {
+const WakeOnLan: React.FC<Props> = ({data, checked, onChange}) => {
     const {jwtFetch} = useAuth();
     //const [editMode, setEditMode] = useState(false);
 
@@ -37,7 +38,7 @@ const WakeOnLan: React.FC<Props> = ({data}) => {
 
     return (
         <tr>
-            <td><Form.Check/></td>
+            <td><Form.Check checked={checked} onChange={onChange}/></td>
             <td onClick={wakeUp}>{name}</td>
             <td onClick={wakeUp}>{address}</td>
             <td>

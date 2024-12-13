@@ -12,8 +12,27 @@ const WakeOnLanList: React.FC = () => {
     const {jwtFetch} = useAuth();
     const {state, dispatch} = useData();
     const [modal, setModal] = useState(false);
+    const [allChecked, setAllChecked] = useState(false);
+    const [checkedRows, setCheckedRows] = useState<boolean[]>([]);
 
     const setWolList = (value: JSONData) => dispatch({key: 'wolList', value});
+
+    // 전체 체크박스 상태 변경
+    const handleAllCheckedChange = () => {
+        const newCheckedState = !allChecked;
+        setAllChecked(newCheckedState);
+        setCheckedRows(new Array(state.wolList.length).fill(newCheckedState));
+    };
+
+    // 개별 체크박스 상태 변경
+    const handleRowCheckedChange = (index: number) => {
+        const newRows = [...checkedRows];
+        newRows[index] = !newRows[index];
+        setCheckedRows(newRows);
+
+        // 전체 체크박스 상태 동기화
+        setAllChecked(newRows.every(Boolean));
+    };
 
     useEffect(() => {
         if(!isArray(state.wolList)){
@@ -22,6 +41,16 @@ const WakeOnLanList: React.FC = () => {
                 .catch(error => console.error(error));
         }
     }, []);
+
+    useEffect(() => {
+        if(checkedRows.length < state.wolList.length){
+            const newRows = [...checkedRows];
+            for(let i = 0, limit = state.wolList.length - checkedRows.length; i < limit; ++i){
+                newRows.push(false);
+            }
+            setCheckedRows(newRows);
+        }
+    }, [checkedRows, state.wolList]);
 
     const addWakeOnLanData = (name: string, address: string) => {
         jwtFetch('/api/wol', {
@@ -52,7 +81,11 @@ const WakeOnLanList: React.FC = () => {
             <Table className="wol" hover>
                 <thead className="text-primary">
                 <tr>
-                    <th><Form.Check/></th>
+                    <th>
+                        <Form.Check
+                            checked={allChecked}
+                            onChange={handleAllCheckedChange}/>
+                    </th>
                     <th className="text-center">이름</th>
                     <th className="text-center">MAC</th>
                     <th className="text-center">전원</th>
@@ -61,7 +94,12 @@ const WakeOnLanList: React.FC = () => {
                 </thead>
                 <tbody>
                     {
-                        wolList.map(data => <WakeOnLan key={data.id} data={data}/>) ||
+                        wolList.map((data, index) => <WakeOnLan
+                            key={data.id}
+                            data={data}
+                            checked={checkedRows[index]}
+                            onChange={() => handleRowCheckedChange(index)}
+                        />) ||
                         <tr>
                             <td colSpan={5} style={{paddingTop: '20px'}}>등록된 PC가 없습니다.</td>
                         </tr>
