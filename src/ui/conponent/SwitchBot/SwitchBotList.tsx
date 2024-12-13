@@ -12,12 +12,10 @@ const SwitchBotList: React.FC = () => {
     return <>
         <Container>
             <ContainerHeader title="방 전등">
-                <span
+                <BsPencilSquare
                     className="item-header-button ms-auto"
                     onClick={() => toastInfo('준비중인 기능입니다.')}
-                >
-                    <BsPencilSquare/>
-                </span>
+                />
             </ContainerHeader>
             <div className="switch-bot-list">
                 {switchBotList.map((sw: any, i: number) => <SwitchBot key={i} device={sw}/>)}

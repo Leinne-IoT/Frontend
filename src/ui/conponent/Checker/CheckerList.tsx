@@ -13,12 +13,10 @@ const CheckerList = () => {
     return <>
         <Container>
             <ContainerHeader title="문/창문 상태">
-                <span
+                <BsPencilSquare
                     className="item-header-button ms-auto"
                     onClick={() => toastInfo('준비중인 기능입니다.')}
-                >
-                    <BsPencilSquare/>
-                </span>
+                />
             </ContainerHeader>
             <Table hover>
                 <thead className="text-primary">
