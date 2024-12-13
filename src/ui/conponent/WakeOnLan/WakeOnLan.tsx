@@ -43,12 +43,12 @@ const WakeOnLan: React.FC<Props> = ({pcData, checked, onChange}) => {
             <td><Form.Check checked={checked} onChange={onChange}/></td>
             <td>{name}</td>
             <td>{address}</td>
-            <td>
+            <td className="p-2">
                 <Button
                     size="sm"
+                    className="wol-power-button"
                     variant={connected ? undefined : "danger"}
                     onClick={connected ? undefined : wakeUpPC}
-                    style={{padding: "10px 18px"}}
                     disabled={connected}
                 />
             </td>

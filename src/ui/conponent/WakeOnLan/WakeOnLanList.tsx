@@ -2,12 +2,13 @@ import React, {useState, useEffect} from 'react';
 import {isArray, JSONData} from "../../../utils/utils.ts";
 import {useData} from "../../../feature/provider/DataProvider.tsx";
 import {useAuth} from "../../../feature/provider/AuthProvider.tsx";
-import {toastError} from "../../../feature/utils/toast.tsx";
+import {toastError, toastInfo,} from "../../../feature/utils/toast.tsx";
 import Container from "../../common/Container.tsx";
-import {Table, Form} from "react-bootstrap";
+import {Table, Form, OverlayTrigger, Tooltip} from "react-bootstrap";
 import WakeOnLan from "./WakeOnLan.tsx";
 import ContainerHeader from "../../common/ContainerHeader.tsx";
 import AddWakeOnLanModal from "../../modal/AddWakeOnLanModal.tsx";
+import {BiPlus, BiTrash} from "react-icons/bi";
 
 const WakeOnLanList: React.FC = () => {
     const {jwtFetch} = useAuth();
@@ -73,6 +74,16 @@ const WakeOnLanList: React.FC = () => {
     }
 
     const removeWakeOnLanData = async () => {
+        let wolList: any[] = state.wolList || [];
+        wolList = wolList.filter((_, index) => checkedRows[index]);
+
+        if(wolList.length < 1){
+            toastError('제거할 항목이 선택되지 않았습니다.')
+            return;
+        }
+        if(confirm('선택한 항목을 정말로 제거하시겠습니까?')){
+            toastInfo('준비중인 기능입니다.');
+        }
     }
 
     const wolList: any[] = state.wolList || [];
@@ -80,7 +91,17 @@ const WakeOnLanList: React.FC = () => {
         <AddWakeOnLanModal visibility={modal} setVisibility={showModal} onSubmit={addWakeOnLanData}/>
         <Container>
             <ContainerHeader title="LAN으로 깨우기">
-                <div className="ms-auto me-2" onClick={() => showModal(true)} style={{cursor: 'pointer'}}>+</div>
+                {/*<div className="wol-add ms-auto me-2" >+</div>*/}
+                <OverlayTrigger overlay={<Tooltip>추가</Tooltip>} placement="top">
+                    <span className="ms-auto" onClick={() => showModal(true)}>
+                        <BiPlus className="wol-header-button"/>
+                    </span>
+                </OverlayTrigger>
+                <OverlayTrigger overlay={<Tooltip>제거</Tooltip>} placement="top">
+                    <span className="ms-2" onClick={removeWakeOnLanData}>
+                        <BiTrash className="wol-header-button"/>
+                    </span>
+                </OverlayTrigger>
             </ContainerHeader>
             <Table className="wol" hover>
                 <thead className="text-primary">
@@ -97,17 +118,15 @@ const WakeOnLanList: React.FC = () => {
                 </tr>
                 </thead>
                 <tbody>
-                    {
-                        wolList.map((data, index) => <WakeOnLan
-                            key={data.id}
-                            pcData={data}
-                            checked={checkedRows[index] || false}
-                            onChange={() => handleRowCheckedChange(index)}
-                        />) ||
-                        <tr>
-                            <td colSpan={5} style={{paddingTop: '20px'}}>등록된 PC가 없습니다.</td>
-                        </tr>
-                    }
+                    {wolList.map((data, index) => <WakeOnLan
+                        key={data.id}
+                        pcData={data}
+                        checked={checkedRows[index] || false}
+                        onChange={() => handleRowCheckedChange(index)}
+                    />) ||
+                    <tr>
+                        <td colSpan={5} style={{paddingTop: '20px'}}>등록된 PC가 없습니다.</td>
+                    </tr>}
                 </tbody>
             </Table>
         </Container>

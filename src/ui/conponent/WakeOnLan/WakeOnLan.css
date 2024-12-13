@@ -1,22 +1,18 @@
 .wol th, .wol td{
-    padding: 6px !important;
     text-align: center !important;
 }
 
-.wol-add{
-    color: #9A9A9A;
+.wol-header-button{
+    color: #000;
     cursor: pointer;
-    transition: all 0.4s;
-    font-size: 1.4em !important;
+    transition: all 0.3s;
+    font-size: 1.3em !important;
 }
-.wol-add:hover{
-    color: #FFF;
+.wol-header-button:hover{
+    color: #979797;
 }
 
-.wol-edit{
-    color: #9A9A9A;
-    font-size: 1.5em !important;
-}
-.wol-edit:hover{
-    color: #FFF;
+.wol-power-button{
+    padding: 12px;
+    border-radius: 50%;
 }
