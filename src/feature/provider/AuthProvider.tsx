@@ -138,7 +138,6 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
                 }else if(authentication){
                     reconnectTimeout = setTimeout(connectWebSocket, 1000);
                 }
-                console.log(event);
             });
 
             setSocket(webSocket);
