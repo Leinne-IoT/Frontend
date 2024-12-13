@@ -1,7 +1,7 @@
 import './SwitchBot.css';
 import React from "react";
 import {Button} from "react-bootstrap";
-import {notifyError} from "../../../utils/noti.tsx";
+import {toastError} from "../../../feature/utils/toast.tsx";
 
 export interface SwitchBotDevice{
     id: string; // 기기 ID
@@ -31,10 +31,13 @@ const SwitchBot: React.FC<Props> = ({device}) => {
             .then(async (res) => {
                 if(res.status !== 200){
                     const json = await res.json();
-                    notifyError(<>스위치 조작에 실패했습니다.<br/>이유: {json.message}</>, json)
+                    toastError(<>스위치 조작에 실패했습니다.<br/>이유: {json.message}</>)
                 }
             })
-            .catch((error) => notifyError(<>스위치 조작에 실패했습니다.</>, error));
+            .catch((error) => {
+                toastError(<>스위치 조작에 실패했습니다.</>)
+                console.error(error)
+            });
     };
     return (
         <div className="switch-bot m-0">

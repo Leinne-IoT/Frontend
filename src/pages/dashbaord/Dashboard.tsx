@@ -5,10 +5,7 @@ import Masonry from "react-masonry-css";
 import SwitchBotList from "../../ui/conponent/SwitchBot/SwitchBotList.tsx";
 import {useResizeDetector} from "react-resize-detector";
 import CheckerList from "../../ui/conponent/Checker/CheckerList.tsx";
-import AirConditioner from "../../ui/conponent/Remote/AirConditioner.tsx";
-import Container from "../../ui/common/Container.tsx";
 import WakeOnLanList from "../../ui/conponent/WakeOnLan/WakeOnLanList.tsx";
-import ContainerHeader from "../../ui/common/ContainerHeader.tsx";
 import RemoteList from "../../ui/conponent/Remote/RemoteList.tsx";
 
 export const Dashboard: React.FC = () => {

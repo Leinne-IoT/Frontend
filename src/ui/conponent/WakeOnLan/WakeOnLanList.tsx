@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {isArray, JSONData} from "../../../utils/utils.ts";
 import {useData} from "../../../feature/provider/DataProvider.tsx";
 import {useAuth} from "../../../feature/provider/AuthProvider.tsx";
-import {notifyError} from "../../../utils/noti.tsx";
+import {toastError} from "../../../feature/utils/toast.tsx";
 import Container from "../../common/Container.tsx";
 import {Table, Form} from "react-bootstrap";
 import WakeOnLan from "./WakeOnLan.tsx";
@@ -37,8 +37,9 @@ const WakeOnLanList: React.FC = () => {
                 }
             })
             .then(() => setModal(false))
-            .catch((error) => notifyError(error.message, error));
+            .catch((error) => toastError(error));
     }
+
     const removeWakeOnLanData = async () => {
         // TODO: input[check] 구해와서 해당 내용 제거
     }

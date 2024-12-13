@@ -3,7 +3,7 @@ import ModalBase from "./ModalBase.tsx";
 import {CheckerDevice} from "../conponent/Checker/Checker.tsx";
 import {CheckerHistoryTable} from "../conponent/Checker/CheckerHistory.tsx";
 import {Button} from "react-bootstrap";
-import {notifyError} from "../../utils/noti.tsx";
+import {toastError} from "../../feature/utils/toast.tsx";
 import {useAuth} from "../../feature/provider/AuthProvider.tsx";
 
 interface Props{
@@ -29,7 +29,7 @@ export const CheckerInfoModal: React.FC<Props> = ({visibility, setVisibility, de
                 }
                 setCheckerHistory(list)
             }catch(error: any){
-                notifyError(error.message, error)
+                toastError(error)
             }
         }
 

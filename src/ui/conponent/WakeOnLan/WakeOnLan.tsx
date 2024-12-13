@@ -1,8 +1,8 @@
 import './WakeOnLan.css';
 import React, {useState} from "react";
 import {useAuth} from "../../../feature/provider/AuthProvider.tsx";
-import {notifyError} from "../../../utils/noti.tsx";
-import {Button, Form, OverlayTrigger, Tooltip} from "react-bootstrap";
+import {toastError} from "../../../feature/utils/toast.tsx";
+import {Button, Form} from "react-bootstrap";
 import EditButton from "../../common/EditButton.tsx";
 
 interface PC{
@@ -31,7 +31,7 @@ const WakeOnLan: React.FC<Props> = ({data}) => {
                 headers: {"Content-Type": "application/json"}
             });
         }catch(error: any){
-            notifyError(error.message, error);
+            toastError(error);
         }
     };
 

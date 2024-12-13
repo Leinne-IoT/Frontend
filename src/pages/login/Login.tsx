@@ -3,7 +3,7 @@ import './Login.css';
 import {FC, FormEventHandler, useEffect, useState} from "react";
 import {useAuth} from "../../feature/provider/AuthProvider.tsx";
 import {Card, Form, Button, Container, Row, Col} from "react-bootstrap";
-import {notifyError} from "../../utils/noti.tsx";
+import {toastError} from "../../feature/utils/toast.tsx";
 import {useData} from "../../feature/provider/DataProvider.tsx";
 
 export const Login: FC = () => {
@@ -34,10 +34,10 @@ export const Login: FC = () => {
                 setAuthentication(true);
                 dispatch({key: 'profile', value: jsonData})
             }else{
-                notifyError(message, jsonData.error);
+                toastError(message);
             }
         }catch(error){
-            notifyError(message, error);
+            toastError(message);
             console.error('Login failed:', error);
         }
         setTryLogin(false);
