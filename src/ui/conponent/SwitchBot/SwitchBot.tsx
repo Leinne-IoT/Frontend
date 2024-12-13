@@ -8,7 +8,7 @@ export interface SwitchBotDevice{
     name: string; // 기기 이름
     connected: boolean; // 기기 연결 상태
     switch: {[channel: number]: boolean}; // 채널별 on/off 상태
-    switchName: {[channel: number]: string}; // 채널별 스위치 이름
+    switchName?: {[channel: number]: string}; // 채널별 스위치 이름
 }
 
 interface Props {
@@ -39,39 +39,30 @@ const SwitchBot: React.FC<Props> = ({device}) => {
                 console.error(error)
             });
     };
+
+    const switchButtonList = [];
+    for(const channel in device.switch){
+        switchButtonList.push(
+            <div className="switch-bot-button-container" key={channel}>
+                <span>{device.switchName?.[channel] || ''}</span>
+                <Button
+                    name={channel}
+                    onClick={onClick}
+                    variant={device.switch[channel] ? "primary" : "secondary"}
+                >
+                    {device.switch[channel] ? "끄기" : "켜기"}
+                </Button>
+            </div>
+        );
+    }
     return (
-        <div className="switch-bot m-0">
-            {/*<Col xs='2' style={{display: 'flex', padding: 0, justifyContent: 'center'}}>
-                <img src={SwitchIcon} className="switch-bot-icon" alt="Toggle Icon"/>
-            </Col>*/}
-            <div className='switch-bot-name ps-3'>
+        <div className="switch-bot">
+            <div className='switch-bot-name'>
                 <span style={{color: 'red'}}>{device.connected ? '' : '!'}</span>
                 {device.name}
             </div>
-            <div className="align-items-center ms-auto me-3">
-                <div className="switch-bot-button-container">
-                    <span>{device.switchName[0]}</span>
-                    <Button
-                        name="0"
-                        color={device.switch[0] ? "info" : ""}
-                        className="animation-on-hover"
-                        onClick={onClick}
-                        style={{transition: '0.3s'}}
-                    >
-                        {device.switch[0] ? "끄기" : "켜기"}
-                    </Button>
-                </div>
-                <div className="switch-bot-button-container">
-                    <span>{device.switchName[1]}</span>
-                    <Button
-                        name="1"
-                        color={device.switch[1] ? "info" : ""}
-                        className="animation-on-hover"
-                        onClick={onClick}
-                    >
-                        {device.switch[1] ? "끄기" : "켜기"}
-                    </Button>
-                </div>
+            <div className="align-items-center ms-auto">
+                {switchButtonList}
             </div>
         </div>
     );
