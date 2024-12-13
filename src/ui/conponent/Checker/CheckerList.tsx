@@ -4,7 +4,8 @@ import {Table} from "react-bootstrap";
 import Container from "../../common/Container.tsx";
 import React from "react";
 import ContainerHeader from "../../common/ContainerHeader.tsx";
-import EditButton from "../../common/EditButton.tsx";
+import {toastInfo} from "../../../feature/utils/toast.tsx";
+import {BsPencilSquare} from "react-icons/bs";
 
 const CheckerList = () => {
     const {state: {checkerList}} = useData();
@@ -12,7 +13,12 @@ const CheckerList = () => {
     return <>
         <Container>
             <ContainerHeader title="문/창문 상태">
-                <EditButton/>
+                <span
+                    className="item-header-button ms-auto"
+                    onClick={() => toastInfo('준비중인 기능입니다.')}
+                >
+                    <BsPencilSquare/>
+                </span>
             </ContainerHeader>
             <Table hover>
                 <thead className="text-primary">

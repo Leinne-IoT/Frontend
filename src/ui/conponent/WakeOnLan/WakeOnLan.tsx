@@ -1,9 +1,9 @@
 import './WakeOnLan.css';
 import React, {useState} from "react";
 import {useAuth} from "../../../feature/provider/AuthProvider.tsx";
-import {toastError} from "../../../feature/utils/toast.tsx";
+import {toastError, toastInfo} from "../../../feature/utils/toast.tsx";
 import {Button, Form} from "react-bootstrap";
-import EditButton from "../../common/EditButton.tsx";
+import {BsPencilSquare} from "react-icons/bs";
 
 interface PC{
     id: number;
@@ -53,7 +53,7 @@ const WakeOnLan: React.FC<Props> = ({pcData, checked, onChange}) => {
                 />
             </td>
             <td>
-                <EditButton/>
+                <BsPencilSquare onClick={() => toastInfo('준비중인 기능입니다.')}/>
             </td>
         </tr>
     );
