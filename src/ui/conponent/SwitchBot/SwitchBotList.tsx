@@ -3,7 +3,8 @@ import {useData} from "../../../feature/provider/DataProvider.tsx";
 import React from "react";
 import Container from "../../common/Container.tsx";
 import ContainerHeader from "../../common/ContainerHeader.tsx";
-import EditButton from "../../common/EditButton.tsx";
+import {BsPencilSquare} from "react-icons/bs";
+import {toastInfo} from "../../../feature/utils/toast.tsx";
 
 const SwitchBotList: React.FC = () => {
     const {state} = useData();
@@ -11,7 +12,12 @@ const SwitchBotList: React.FC = () => {
     return <>
         <Container>
             <ContainerHeader title="방 전등">
-                <EditButton/>
+                <span
+                    className="item-header-button ms-auto"
+                    onClick={() => toastInfo('준비중인 기능입니다.')}
+                >
+                    <BsPencilSquare/>
+                </span>
             </ContainerHeader>
             <div className="switch-bot-list">
                 {switchBotList.map((sw: any, i: number) => <SwitchBot key={i} device={sw}/>)}

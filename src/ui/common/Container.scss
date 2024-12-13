@@ -19,6 +19,10 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.175);
 }
 
+.item-header-button{
+    cursor: pointer;
+}
+
 .item-content{
     display: flex;
     align-items: center;
