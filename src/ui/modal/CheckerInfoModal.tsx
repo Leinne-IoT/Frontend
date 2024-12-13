@@ -47,7 +47,7 @@ export const CheckerInfoModal: React.FC<Props> = ({visibility, setVisibility, de
                 <Pagination className="justify-content-center mb-0 mt-2">
                     <Pagination.Item active>1</Pagination.Item>
                     {new Array(9).fill('').map((_, index) => (
-                        <Pagination.Item>
+                        <Pagination.Item key={index}>
                             {index + 2}
                         </Pagination.Item>
                     ))}
