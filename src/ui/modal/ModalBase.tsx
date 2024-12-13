@@ -1,4 +1,4 @@
-import {Modal, ModalBody, ModalHeader, ModalTitle} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import React, {ReactNode} from "react";
 
 interface Props{
@@ -9,16 +9,14 @@ interface Props{
 }
 
 const ModalBase: React.FC<Props> = ({visibility, setVisibility, title, children}) => {
-    const handleClose = () => setVisibility(false);
-    const handleShow = () => setVisibility(true);
     return (
-        <Modal show={visibility} onHide={handleClose}>
-            <ModalHeader>
-                <ModalTitle>{title}</ModalTitle>
-            </ModalHeader>
-            <ModalBody>
+        <Modal show={visibility} onHide={() => setVisibility(false)}>
+            <Modal.Header>
+                <Modal.Title>{title}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
                 {children}
-            </ModalBody>
+            </Modal.Body>
         </Modal>
     );
 }

@@ -8,7 +8,7 @@ import {useAuth} from "../../feature/provider/AuthProvider.tsx";
 
 interface Props{
     visibility: boolean;
-    setVisibility: (visibility: boolean) => void;
+    setVisibility: (visibility: boolean) => any;
     device: CheckerDevice
 }
 
