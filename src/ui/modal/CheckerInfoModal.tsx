@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {CheckerDevice} from "../conponent/Checker/Checker.tsx";
 import {CheckerHistoryTable} from "../conponent/Checker/CheckerHistory.tsx";
-import {Button, Modal} from "react-bootstrap";
+import {Button, Modal, Pagination} from "react-bootstrap";
 import {toastError} from "../../feature/utils/toast.tsx";
 import {useAuth} from "../../feature/provider/AuthProvider.tsx";
 
@@ -44,6 +44,14 @@ export const CheckerInfoModal: React.FC<Props> = ({visibility, setVisibility, de
             </Modal.Header>
             <Modal.Body>
                 <CheckerHistoryTable list={checkerHistory}/>
+                <Pagination className="justify-content-center mb-0 mt-2">
+                    <Pagination.Item active>1</Pagination.Item>
+                    {new Array(9).fill('').map((_, index) => (
+                        <Pagination.Item>
+                            {index + 2}
+                        </Pagination.Item>
+                    ))}
+                </Pagination>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={() => setVisibility(false)}>닫기</Button>
