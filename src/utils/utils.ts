@@ -39,9 +39,18 @@ export const tryParseJson = (data: any) => {
 
 export const dateToString = (date: Date | number | string, includeTime: boolean) => {
     date = typeof date !== 'object' ? new Date(date || 0) : date;
-    let output = `${date.getFullYear()}-${(date.getMonth() + 1 + '').padStart(2, '0')}-${(date.getDate() + '').padStart(2, '0')}`;
+    const year = date.getFullYear();
+    const currentYear = new Date().getFullYear();
+    let output = `${year === currentYear ? '' : `${year}/`}${(date.getMonth() + 1 + '').padStart(2, '0')}/${(date.getDate() + '').padStart(2, '0')}`;
     if(includeTime){
-        output += ` ${(date.getHours() + '').padStart(2, '0')}:${(date.getMinutes() + '').padStart(2, '0')}:${(date.getSeconds() + '').padStart(2, '0')}`;
+        let period = '오전';
+        let hour = date.getHours();
+        if(hour >= 12){
+            period = '오후';
+            hour %= 12;
+        }
+        hour = hour === 0 ? 12 : hour;
+        output += ` ${period} ${(hour + '').padStart(2, '0')}:${(date.getMinutes() + '').padStart(2, '0')}`;
     }
     return output;
 }
