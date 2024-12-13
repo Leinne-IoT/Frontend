@@ -9,22 +9,24 @@ interface PC{
     id: number;
     name: string;
     address: string;
+    connected: boolean;
 }
 
 interface Props{
-    data: PC;
+    pcData: PC;
     checked: boolean;
     onChange: () => any;
 }
 
-const WakeOnLan: React.FC<Props> = ({data, checked, onChange}) => {
+const WakeOnLan: React.FC<Props> = ({pcData, checked, onChange}) => {
     const {jwtFetch} = useAuth();
     //const [editMode, setEditMode] = useState(false);
 
-    const name = data.name
-    const address = data.address
+    const name = pcData.name || '';
+    const address = pcData.address || '';
+    const connected = pcData.connected || false;
 
-    const wakeUp = async () => {
+    const wakeUpPC = async () => {
         try{
             await jwtFetch('/api/wol', {
                 method: 'POST',
@@ -39,10 +41,16 @@ const WakeOnLan: React.FC<Props> = ({data, checked, onChange}) => {
     return (
         <tr>
             <td><Form.Check checked={checked} onChange={onChange}/></td>
-            <td onClick={wakeUp}>{name}</td>
-            <td onClick={wakeUp}>{address}</td>
+            <td>{name}</td>
+            <td>{address}</td>
             <td>
-                <Button size="sm" color="info" onClick={wakeUp} style={{padding: "10px 18px"}}></Button>
+                <Button
+                    size="sm"
+                    variant={connected ? undefined : "danger"}
+                    onClick={connected ? undefined : wakeUpPC}
+                    style={{padding: "10px 18px"}}
+                    disabled={connected}
+                />
             </td>
             <td>
                 <EditButton/>

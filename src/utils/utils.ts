@@ -54,3 +54,8 @@ export const dateToString = (date: Date | number | string, includeTime: boolean)
     }
     return output;
 }
+
+export const validateMacAddress = (mac: string): boolean => {
+    const macRegex = /^(?:[0-9A-Fa-f]{2}([-:]))(?:[0-9A-Fa-f]{2}\1){4}[0-9A-Fa-f]{2}$/;
+    return macRegex.test(mac);
+};

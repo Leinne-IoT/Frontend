@@ -7,6 +7,7 @@ import Container from "../../common/Container.tsx";
 import {Table, Form} from "react-bootstrap";
 import WakeOnLan from "./WakeOnLan.tsx";
 import ContainerHeader from "../../common/ContainerHeader.tsx";
+import AddWakeOnLanModal from "../../modal/AddWakeOnLanModal.tsx";
 
 const WakeOnLanList: React.FC = () => {
     const {jwtFetch} = useAuth();
@@ -72,12 +73,11 @@ const WakeOnLanList: React.FC = () => {
     }
 
     const removeWakeOnLanData = async () => {
-        // TODO: input[check] 구해와서 해당 내용 제거
     }
 
     const wolList: any[] = state.wolList || [];
     return <>
-        {/*<AddWakeOnLanModal visibility={modal} setVisibility={setModal} onSubmit={addWakeOnLanData}/>*/}
+        <AddWakeOnLanModal visibility={modal} setVisibility={showModal} onSubmit={addWakeOnLanData}/>
         <Container>
             <ContainerHeader title="LAN으로 깨우기">
                 <div className="ms-auto me-2" onClick={() => showModal(true)} style={{cursor: 'pointer'}}>+</div>
@@ -100,7 +100,7 @@ const WakeOnLanList: React.FC = () => {
                     {
                         wolList.map((data, index) => <WakeOnLan
                             key={data.id}
-                            data={data}
+                            pcData={data}
                             checked={checkedRows[index] || false}
                             onChange={() => handleRowCheckedChange(index)}
                         />) ||
