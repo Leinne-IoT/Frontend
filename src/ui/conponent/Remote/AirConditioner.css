@@ -1,0 +1,75 @@
+.remote-con{
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-height: 104px;
+}
+.remote-con-name{
+    color: black;
+    font-size: 22px;
+    font-weight: bold;
+
+    padding: 6px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.ac-modal{
+    background-color: #27293d !important;
+}
+.ac-temp{
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    padding: 0;
+    height: 38px;
+}
+.ac-temp > span{
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+
+    font-size: 14px !important;
+    color: #686868;
+    margin: 0 2px;
+
+    -webkit-transition: .3s;
+    transition: .3s;
+}
+.ac-temp > span.selected{
+    color: #000;
+    font-size: 21px !important;
+
+    -webkit-transition: .3s;
+    transition: .3s;
+}
+
+.dropdown-item.selected{
+    background-color: #7f7b9498;
+}
+
+.day-button-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.day-button{
+    width: 36px;
+    height: 36px;
+    color: #000;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 1px solid transparent;
+    transition: all .2s ease-in-out;
+}
+.day-button.selected{
+    color: #7730e9;
+    font-weight: bold;
+    border-color: #7730e9;
+}
