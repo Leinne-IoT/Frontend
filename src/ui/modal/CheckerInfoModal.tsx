@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
-import ModalBase from "./ModalBase.tsx";
 import {CheckerDevice} from "../conponent/Checker/Checker.tsx";
 import {CheckerHistoryTable} from "../conponent/Checker/CheckerHistory.tsx";
-import {Button} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import {toastError} from "../../feature/utils/toast.tsx";
 import {useAuth} from "../../feature/provider/AuthProvider.tsx";
 
@@ -39,9 +38,16 @@ export const CheckerInfoModal: React.FC<Props> = ({visibility, setVisibility, de
     }, []);
 
     return (
-        <ModalBase title={device.name + " 최근 이력"} visibility={visibility} setVisibility={setVisibility}>
-            <CheckerHistoryTable list={checkerHistory}/>
-            <Button className='animation-on-hover' onClick={() => setVisibility(false)}>닫기</Button>
-        </ModalBase>
+        <Modal show={visibility} onHide={() => setVisibility(false)}>
+            <Modal.Header>
+                <Modal.Title>{device.name + " 최근 이력"}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <CheckerHistoryTable list={checkerHistory}/>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={() => setVisibility(false)}>닫기</Button>
+            </Modal.Footer>
+        </Modal>
     );
 };
