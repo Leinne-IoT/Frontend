@@ -11,7 +11,7 @@ import ContainerHeader from "../../common/ContainerHeader.tsx";
 const WakeOnLanList: React.FC = () => {
     const {jwtFetch} = useAuth();
     const {state, dispatch} = useData();
-    const [modal, setModal] = useState(false);
+    const [modal, showModal] = useState(false);
     const [allChecked, setAllChecked] = useState(false);
     const [checkedRows, setCheckedRows] = useState<boolean[]>([]);
 
@@ -43,9 +43,10 @@ const WakeOnLanList: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if(checkedRows.length < state.wolList.length){
+        const wolList: any[] = state.wolList || [];
+        if(checkedRows.length < wolList.length){
             const newRows = [...checkedRows];
-            for(let i = 0, limit = state.wolList.length - checkedRows.length; i < limit; ++i){
+            for(let i = 0, limit = wolList.length - checkedRows.length; i < limit; ++i){
                 newRows.push(false);
             }
             setCheckedRows(newRows);
@@ -60,12 +61,13 @@ const WakeOnLanList: React.FC = () => {
         })
             .then(async res => {
                 if(res.ok){
-                    const list = [...state.wolList];
+                    const wolList: any[] = state.wolList || [];
+                    const list = [...wolList];
                     list.push(await res.json());
                     setWolList(list);
                 }
             })
-            .then(() => setModal(false))
+            .then(() => showModal(false))
             .catch((error) => toastError(error));
     }
 
@@ -77,7 +79,9 @@ const WakeOnLanList: React.FC = () => {
     return <>
         {/*<AddWakeOnLanModal visibility={modal} setVisibility={setModal} onSubmit={addWakeOnLanData}/>*/}
         <Container>
-            <ContainerHeader title="LAN으로 깨우기"/>
+            <ContainerHeader title="LAN으로 깨우기">
+                <div className="ms-auto me-2" onClick={() => showModal(true)} style={{cursor: 'pointer'}}>+</div>
+            </ContainerHeader>
             <Table className="wol" hover>
                 <thead className="text-primary">
                 <tr>
@@ -97,7 +101,7 @@ const WakeOnLanList: React.FC = () => {
                         wolList.map((data, index) => <WakeOnLan
                             key={data.id}
                             data={data}
-                            checked={checkedRows[index]}
+                            checked={checkedRows[index] || false}
                             onChange={() => handleRowCheckedChange(index)}
                         />) ||
                         <tr>
