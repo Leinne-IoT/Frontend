@@ -3,13 +3,18 @@ import {useData} from "../../../feature/provider/DataProvider.tsx";
 import {Table} from "react-bootstrap";
 import Container from "../../common/Container.tsx";
 import React from "react";
+import ContainerHeader from "../../common/ContainerHeader.tsx";
+import EditButton from "../../common/EditButton.tsx";
 
 const CheckerList = () => {
     const {state: {checkerList}} = useData();
     const list: any[] = checkerList || [];
     return <>
-        <Container title="문/창문 상태" editable>
-            <Table className="checker-table" hover>
+        <Container>
+            <ContainerHeader title="문/창문 상태">
+                <EditButton/>
+            </ContainerHeader>
+            <Table hover>
                 <thead className="text-primary">
                     <tr>
                         <th className="text-center">장소</th>

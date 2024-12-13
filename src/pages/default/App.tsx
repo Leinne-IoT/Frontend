@@ -1,9 +1,11 @@
+import './App.scss';
+
 import {FC, useEffect} from 'react';
-import {Login} from './login/Login.tsx';
-import {Dashboard} from './dashbaord/Dashboard.tsx';
+import {Login} from '../login/Login.tsx';
+import {Dashboard} from '../dashbaord/Dashboard.tsx';
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import MainLayout from "../ui/layout/MainLayout.tsx";
-import {useAuth} from "../feature/provider/AuthProvider.tsx";
+import MainLayout from "../../ui/layout/MainLayout.tsx";
+import {useAuth} from "../../feature/provider/AuthProvider.tsx";
 
 const App: FC = () => {
     const {jwtFetch, authentication} = useAuth();

@@ -1,30 +1,17 @@
-.iot-container {
-    display: flex;
-    padding: 10px 5px;
-}
-
-.column {
-    padding: 0 5px;
-}
-
-.item-container {
-    & + & {
+.item-container{
+    & + &{
         margin-top: 10px;
     }
+
     border: 1px solid rgba(0, 0, 0, 0.175);
     border-radius: 8px;
     background-color: #fff;
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.12), 0 0 15px 0 rgba(0, 0, 0, 0.08);
 }
 
-// HACK: bootstrap table style 무효화
-.item-container .table>:not(caption) > * > * {
-    //background-color: rgba(0, 0, 0, 0);
-}
-
-.item-title {
+.item-header{
     display: flex;
-    padding: 8px 8px 8px 10px;
+    padding: 6px 10px;
     font-size: 20px;
     font-weight: bold;
     width: 100%;
@@ -32,7 +19,7 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.175);
 }
 
-.item-content {
+.item-content{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -42,14 +29,7 @@
     font-weight: bold;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: Arial, sans-serif;
-    box-sizing: border-box;
-}
-
-* {
-    box-sizing: border-box;
+.item-container table{
+    width: calc(100% - 1.5rem); /* 부모 너비에서 margin만큼 뺌 */
+    margin: 0.75rem; /* m-2에 해당하는 Bootstrap margin */
 }

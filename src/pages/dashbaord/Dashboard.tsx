@@ -1,9 +1,15 @@
+import './Dashboard.css';
+
 import React, {useEffect, useState} from 'react';
 import Masonry from "react-masonry-css";
-import '../../assets/scss/module.scss';
 import SwitchBotList from "../../ui/conponent/SwitchBot/SwitchBotList.tsx";
 import {useResizeDetector} from "react-resize-detector";
 import CheckerList from "../../ui/conponent/Checker/CheckerList.tsx";
+import AirConditioner from "../../ui/conponent/Remote/AirConditioner.tsx";
+import Container from "../../ui/common/Container.tsx";
+import WakeOnLanList from "../../ui/conponent/WakeOnLan/WakeOnLanList.tsx";
+import ContainerHeader from "../../ui/common/ContainerHeader.tsx";
+import RemoteList from "../../ui/conponent/Remote/RemoteList.tsx";
 
 export const Dashboard: React.FC = () => {
     const {width, ref} = useResizeDetector();
@@ -23,12 +29,14 @@ export const Dashboard: React.FC = () => {
 
     return <div ref={ref}>
         <Masonry
-            breakpointCols={columnCount}
             className="iot-container"
             columnClassName="column"
+            breakpointCols={columnCount}
         >
             <SwitchBotList/>
+            <RemoteList/>
             <CheckerList/>
+            <WakeOnLanList/>
         </Masonry>
     </div>
 }

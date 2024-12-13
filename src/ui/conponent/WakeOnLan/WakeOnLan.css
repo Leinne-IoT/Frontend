@@ -1,0 +1,22 @@
+.wol th, .wol td{
+    padding: 6px !important;
+    text-align: center !important;
+}
+
+.wol-add{
+    color: #9A9A9A;
+    cursor: pointer;
+    transition: all 0.4s;
+    font-size: 1.4em !important;
+}
+.wol-add:hover{
+    color: #FFF;
+}
+
+.wol-edit{
+    color: #9A9A9A;
+    font-size: 1.5em !important;
+}
+.wol-edit:hover{
+    color: #FFF;
+}
