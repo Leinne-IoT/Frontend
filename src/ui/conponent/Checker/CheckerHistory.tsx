@@ -8,7 +8,7 @@ interface TableProps {
 
 export const CheckerHistoryTable: React.FC<TableProps> = ({list}) => {
     return (
-        <Table className="tablesorter" responsive>
+        <Table className="m-0" responsive>
             <thead className="text-primary">
                 <tr>
                     <th className="text-center">No</th>
