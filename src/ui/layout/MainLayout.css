@@ -7,21 +7,4 @@
 
 .main-container {
     flex: 1;
-    overflow-y: auto;
-    transform: translateX(0);
-    transition: transform 0.25s ease, margin-left 0.25s ease; /* 부드러운 애니메이션 */
-}
-
-@media (max-width: 1099px) {
-    /* 화면 너비가 1100px 미만일 때 적용할 스타일 */
-    .main-container.expanded {
-        transform: translateX(260px); /* 기본 위치 */
-    }
-}
-
-@media (min-width: 1100px) {
-    /* 화면 너비가 1100px 이상일 때 적용할 스타일 */
-    .main-container.expanded {
-        margin-left: 260px; /* 기본적으로 사이드바의 너비만큼 여백 */
-    }
 }

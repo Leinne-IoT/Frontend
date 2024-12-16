@@ -29,3 +29,23 @@
 .sidebar-button:hover {
     background: #f4f4f4;
 }
+
+/*Sidebar 가 적용된 main container*/
+.main-container {
+    transform: translateX(0);
+    transition: transform 0.25s ease, margin-left 0.25s ease; /* 부드러운 애니메이션 */
+}
+
+/* 화면 너비가 1100px 미만일 때 적용할 스타일 */
+@media (max-width: 1099px) {
+    .main-container.expanded {
+        transform: translateX(240px); /* 기본 위치 */
+    }
+}
+
+/* 화면 너비가 1100px 이상일 때 적용할 스타일 */
+@media (min-width: 1100px) {
+    .main-container.expanded {
+        margin-left: 240px; /* 기본적으로 사이드바의 너비만큼 여백 */
+    }
+}
