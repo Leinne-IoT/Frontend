@@ -8,3 +8,7 @@
 .main-container {
     flex: 1;
 }
+
+.column{
+    padding: 0 5px;
+}
