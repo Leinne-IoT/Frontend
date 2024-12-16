@@ -1,7 +1,7 @@
 import {FC, useEffect, useRef, useState} from 'react';
 import './Header.css';
 import {useData} from "../../feature/provider/DataProvider.tsx";
-import {useAuth} from "../../feature/provider/AuthProvider.tsx";
+import {AuthStatus, useAuth} from "../../feature/provider/AuthProvider.tsx";
 
 interface HeaderProps {
     onToggleSidebar: () => void;
@@ -9,7 +9,7 @@ interface HeaderProps {
 
 const Header: FC<HeaderProps> = ({onToggleSidebar}) => {
     const {state} = useData();
-    const {setAuthentication} = useAuth();
+    const {setAuthStatus} = useAuth();
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null); // 드롭다운을 감지하기 위한 Ref
 
@@ -18,7 +18,7 @@ const Header: FC<HeaderProps> = ({onToggleSidebar}) => {
     };
 
     const handleLogout = () => {
-        fetch(`/logout`).then(res => res.ok && setAuthentication(false));
+        fetch(`/logout`).then(res => res.ok && setAuthStatus(AuthStatus.FALSE));
     };
 
     useEffect(() => {

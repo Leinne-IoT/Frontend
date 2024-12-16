@@ -38,9 +38,13 @@ const WakeOnLanList: React.FC = () => {
 
     useEffect(() => {
         if(!isArray(state.wolList)){
+            state.wolList = [];
             jwtFetch(`/data/wol`, {method: 'POST'})
                 .then(async res => setWolList(await res.json()))
-                .catch(error => console.error(error));
+                .catch(error => {
+                    console.error(error)
+                    dispatch({key: 'wolList', value: undefined});
+                });
         }
     }, []);
 

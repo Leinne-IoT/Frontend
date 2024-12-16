@@ -5,10 +5,10 @@ import {Login} from '../login/Login.tsx';
 import {Dashboard} from '../dashbaord/Dashboard.tsx';
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import MainLayout from "../../ui/layout/MainLayout.tsx";
-import {useAuth} from "../../feature/provider/AuthProvider.tsx";
+import {AuthStatus, useAuth} from "../../feature/provider/AuthProvider.tsx";
 
 const App: FC = () => {
-    const {jwtFetch, authentication} = useAuth();
+    const {jwtFetch, authStatus} = useAuth();
 
     useEffect(() => {
         const urlBase64ToUint8Array = (value: string) => {
@@ -52,9 +52,9 @@ const App: FC = () => {
         }
     }, []);
 
-    if(authentication == null){
+    if(authStatus <= AuthStatus.VERIFYING){
         return <></>;
-    }else if(!authentication){
+    }else if(!authStatus){
         return (
             <BrowserRouter>
                 <Routes>
@@ -66,7 +66,12 @@ const App: FC = () => {
     }
     return (
         <MainLayout>
-            <Dashboard/>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Dashboard/>}/>
+                    <Route path="*" element={<Navigate to="/"/>}/>
+                </Routes>
+            </BrowserRouter>
         </MainLayout>
     );
 }

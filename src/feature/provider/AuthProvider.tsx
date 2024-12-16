@@ -2,9 +2,16 @@ import {FC, createContext, useRef, useState, useContext, useEffect, ReactNode, D
 import {isNumeric, isObject, tryParseJson} from '../../utils/utils.ts';
 import {useData} from './DataProvider.tsx';
 
+export enum AuthStatus{
+    NONE = -2,      // 미설정
+    VERIFYING = -1, // 확인중
+    FALSE = 0,     // 로그인 안됨
+    TRUE = 1,      // 로그인됨
+}
+
 interface AuthContextProps{
-    authentication: boolean | null;
-    setAuthentication: Dispatch<SetStateAction<boolean | null>>;
+    authStatus: AuthStatus;
+    setAuthStatus: Dispatch<SetStateAction<AuthStatus>>;
     jwtFetch: (url: string, options?: RequestInit) => Promise<Response>;
     socket: WebSocket | null;
 }
@@ -27,7 +34,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
     const {dispatch} = useData();
     const socketRef = useRef<WebSocket | null>(null);
     const [socket, setSocket] = useState<WebSocket | null>(null);
-    const [authentication, setAuthentication] = useState<boolean | null>(null);
+    const [authStatus, setAuthStatus] = useState<AuthStatus>(AuthStatus.NONE);
 
     /*const refreshToken = async (): Promise<boolean> => {
         const res = await fetch('/token/refresh', {
@@ -44,27 +51,28 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
             headers: options.headers || {}
         });
         if(response.status === 401){
-            setAuthentication(false);
+            setAuthStatus(AuthStatus.FALSE);
         }
         return response;
     };
 
     useEffect(() => {
-        if(authentication == null){
+        if(authStatus == AuthStatus.NONE){
+            setAuthStatus(AuthStatus.VERIFYING);
             jwtFetch(`/token/verify`, {method: 'POST'})
                 .then(async (res) => {
-                    setAuthentication(res.ok)
+                    setAuthStatus(res.ok ? AuthStatus.TRUE : AuthStatus.FALSE)
                     const user = await res.json();
                     dispatch({key: 'profile', value: user})
                 })
-                .catch(() => {});
+                .catch(() => setAuthStatus(AuthStatus.FALSE));
         }
-    }, [authentication, dispatch])
+    }, [])
 
     useEffect(() => {
         let reconnectTimeout: any = null;
         const connectWebSocket = () => {
-            if(!authentication || (socketRef.current?.readyState || 3) <= WebSocket.OPEN){
+            if(!authStatus || (socketRef.current?.readyState || 3) <= WebSocket.OPEN){
                 return;
             }
             const protocol = window.location.protocol.includes('https') ? 'wss://' : 'ws://';
@@ -134,8 +142,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
             });
             webSocket.addEventListener('close', event => {
                 if(event.code === 1003){
-                    setAuthentication(false);
-                }else if(authentication){
+                    setAuthStatus(AuthStatus.FALSE);
+                }else if(authStatus){
                     reconnectTimeout = setTimeout(connectWebSocket, 1000);
                 }
             });
@@ -143,7 +151,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
             setSocket(webSocket);
             socketRef.current = webSocket;
         };
-        if(authentication){
+        if(authStatus){
             connectWebSocket();
         }else if(socketRef.current){
             setSocket(null);
@@ -158,10 +166,10 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
                 socketRef.current.close();
             }
         };
-    }, [authentication, dispatch]);
+    }, [authStatus, dispatch]);
 
     return (
-        <AuthContext.Provider value={{authentication, setAuthentication, jwtFetch, socket: socket}}>
+        <AuthContext.Provider value={{authStatus, setAuthStatus, jwtFetch, socket: socket}}>
             {children}
         </AuthContext.Provider>
     );

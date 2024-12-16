@@ -15,25 +15,30 @@ export const CheckerInfoModal: React.FC<Props> = ({visibility, setVisibility, de
     const {jwtFetch} = useAuth();
     const [checkerHistory, setCheckerHistory] = useState<CheckerDevice[]>([]);
 
-    useEffect(() => {
-        const updateHistory = async () => {
-            try{
-                const res = await jwtFetch(`/data/checker?history=true&device=${device.id}`, {method: 'POST'});
-                const list = [];
-                const jsonData = await res.json();
-                for(const index in jsonData){
-                    const history = jsonData[index];
-                    history.number = +index + 1;
-                    list.push(history);
-                }
-                setCheckerHistory(list)
-            }catch(error: any){
-                toastError(error)
+    const updateHistory = async () => {
+        try{
+            const res = await jwtFetch(`/data/checker?history=true&device=${device.id}`, {method: 'POST'});
+            const list = [];
+            const jsonData = await res.json();
+            for(const index in jsonData){
+                const history = jsonData[index];
+                history.number = +index + 1;
+                list.push(history);
             }
+            setCheckerHistory(list)
+        }catch(error: any){
+            toastError(error)
         }
+    }
 
-        updateHistory();
-        const interval = setInterval(updateHistory, 1000 * 60 * 5); // 5분 주기로 창문 상태 갱신, 추후 개선 예정
+    useEffect(() => {
+        if(visibility && checkerHistory.length < 1){
+            updateHistory();
+        }
+    }, [visibility]);
+
+    useEffect(() => { // 5분 주기로 창문 상태 갱신, 추후 개선 예정
+        const interval = setInterval(updateHistory, 1000 * 60 * 5);
         return () => clearInterval(interval);
     }, []);
 

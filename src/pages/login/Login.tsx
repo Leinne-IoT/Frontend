@@ -1,28 +1,28 @@
 import './Login.css';
 
 import {FC, FormEventHandler, useEffect, useState} from "react";
-import {useAuth} from "../../feature/provider/AuthProvider.tsx";
-import {Card, Form, Button, Container, Row, Col} from "react-bootstrap";
+import {AuthStatus, useAuth} from "../../feature/provider/AuthProvider.tsx";
+import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
 import {toastError} from "../../feature/utils/toast.tsx";
 import {useData} from "../../feature/provider/DataProvider.tsx";
 
 export const Login: FC = () => {
     const {dispatch} = useData();
-    const [load, setLoad] = useState(false);
+    const {authStatus, setAuthStatus} = useAuth();
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [tryLogin, setTryLogin] = useState(false);
-    const {authentication, setAuthentication} = useAuth();
+    const [initPage, setInitPage] = useState(false);
 
     const login: FormEventHandler = async event => {
         event.preventDefault();
-        if(authentication || tryLogin){
+        if(authStatus === AuthStatus.TRUE || authStatus === AuthStatus.VERIFYING){
             return;
         }
 
         const message = <>서버 접속에 실패했습니다.<br/>잠시 후 다시 시도합니다.</>;
         try{
-            setTryLogin(true);
+            setAuthStatus(AuthStatus.VERIFYING);
             const res = await fetch(`/login/account`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -31,29 +31,30 @@ export const Login: FC = () => {
             });
             const jsonData = await res.json();
             if(res.ok){
-                setAuthentication(true);
+                setAuthStatus(AuthStatus.TRUE);
                 dispatch({key: 'profile', value: jsonData})
             }else{
                 toastError(message);
+                setAuthStatus(AuthStatus.FALSE);
             }
         }catch(error){
             toastError(message);
+            setAuthStatus(AuthStatus.FALSE);
             console.error('Login failed:', error);
         }
-        setTryLogin(false);
     };
 
     useEffect(() => {
         document.body.classList.add("login-theme");
         document.documentElement.classList.add("login-theme");
-        setLoad(true);
+        setInitPage(true);
         return () => {
             document.body.classList.remove("login-theme");
             document.documentElement.classList.remove("login-theme");
         };
     }, []);
 
-    if(!load){
+    if(!initPage){
         return <></>;
     }
     return (
