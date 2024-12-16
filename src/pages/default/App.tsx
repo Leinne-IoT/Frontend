@@ -6,6 +6,9 @@ import {Dashboard} from '../dashbaord/Dashboard.tsx';
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import MainLayout from "../../ui/layout/MainLayout.tsx";
 import {AuthStatus, useAuth} from "../../feature/provider/AuthProvider.tsx";
+import {Statistics} from "../statistics/Statistics.tsx";
+import {Setting} from "../setting/Setting.tsx";
+import {RouteData} from "../../ui/sidebar/Sidebar.tsx";
 
 const App: FC = () => {
     const {jwtFetch, authStatus} = useAuth();
@@ -64,15 +67,40 @@ const App: FC = () => {
             </BrowserRouter>
         )
     }
+
+    const routeList: RouteData[] = [
+        {
+            path: "/",
+            title: "IoT Webpage",
+            name: "대시보드",
+            component: <Dashboard/>,
+        },
+        {
+            path: "/statistics",
+            title: "Statistics",
+            name: "통계",
+            component: <Statistics/>,
+        },
+        {
+            path: "/settings",
+            title: "Settings",
+            name: "설정",
+            component: <Setting/>,
+        },
+    ];
     return (
-        <MainLayout>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Dashboard/>}/>
-                    <Route path="*" element={<Navigate to="/"/>}/>
-                </Routes>
-            </BrowserRouter>
-        </MainLayout>
+        <BrowserRouter>
+            <Routes>
+                {routeList.map((data, index) => (
+                    <Route
+                        key={index}
+                        path={data.path}
+                        element={<MainLayout routeList={routeList}>{data.component}</MainLayout>}
+                    />
+                ))}
+                <Route path="*" element={<Navigate to="/"/>}/>
+            </Routes>
+        </BrowserRouter>
     );
 }
 export default App;

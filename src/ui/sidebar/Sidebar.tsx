@@ -1,17 +1,31 @@
 import React from 'react';
 import './Sidebar.css';
+import {Link} from "react-router-dom";
 
-interface SidebarProps {
-    isOpen: boolean;
-    toggleSidebar: () => void;
+export interface RouteData{
+    path: string;
+    title: string;
+    name: string;
+    icon?: any;
+    component: any;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({isOpen}) => {
+interface SidebarProps{
+    isOpen: boolean;
+    routeList?: RouteData[];
+}
+
+const Sidebar: React.FC<SidebarProps> = ({isOpen, routeList}) => {
     return (
         <aside className={`sidebar ${isOpen ? "open" : "closed"}`}>
-            <div className="sidebar-button">메뉴 1</div>
-            <div className="sidebar-button">메뉴 2</div>
-            <div className="sidebar-button">메뉴 3</div>
+            {routeList && routeList.map((route, index) => {
+                const isActive = location.pathname === route.path;
+                if(isActive){
+                    return <div key={index} className="active">{route.name}</div>
+                }else{
+                    return <Link key={index} to={route.path}>{route.name}</Link>;
+                }
+            })}
         </aside>
     );
 };
