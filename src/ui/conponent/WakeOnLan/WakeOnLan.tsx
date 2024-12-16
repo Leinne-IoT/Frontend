@@ -48,8 +48,7 @@ const WakeOnLan: React.FC<Props> = ({pcData, checked, onChange}) => {
                     size="sm"
                     className="wol-power-button"
                     variant={connected ? undefined : "danger"}
-                    onClick={connected ? undefined : wakeUpPC}
-                    disabled={connected}
+                    onClick={wakeUpPC}
                 />
             </td>
             <td>
