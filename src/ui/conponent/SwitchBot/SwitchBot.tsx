@@ -1,6 +1,6 @@
 import './SwitchBot.css';
 import React from "react";
-import {Button} from "react-bootstrap";
+import {ButtonGroup, ToggleButton} from "react-bootstrap";
 import {toastError} from "../../../feature/utils/toast.tsx";
 
 export interface SwitchBotDevice{
@@ -16,8 +16,7 @@ interface Props {
 }
 
 const SwitchBot: React.FC<Props> = ({device}) => {
-    const onClick = (event: any) => {
-        const channel = +event.target.name;
+    const onClick = (channel: number) => {
         fetch('/api/switch', {
             method: 'POST',
             body: JSON.stringify({
@@ -44,14 +43,27 @@ const SwitchBot: React.FC<Props> = ({device}) => {
     for(const channel in device.switch){
         switchButtonList.push(
             <div className="switch-bot-button-container" key={channel}>
-                <span>{device.switchName?.[channel] || ''}</span>
-                <Button
-                    name={channel}
-                    onClick={onClick}
-                    variant={device.switch[channel] ? "primary" : "secondary"}
-                >
-                    {device.switch[channel] ? "끄기" : "켜기"}
-                </Button>
+                <span className="switch-bot-button-name">{device.switchName?.[channel] || ''}</span>
+                <ButtonGroup>
+                    <ToggleButton
+                        id={`${device.id}_${channel}`}
+                        value={channel}
+                        type="radio"
+                        onClick={() => onClick(+channel)}
+                        variant={device.switch[channel] ? "primary" : "outline-primary"}
+                    >
+                        켜기
+                    </ToggleButton>
+                    <ToggleButton
+                        id={`${device.id}_${channel}`}
+                        value={channel}
+                        type="radio"
+                        onClick={() => onClick(+channel)}
+                        variant={!device.switch[channel] ? "danger" : "outline-danger"}
+                    >
+                        끄기
+                    </ToggleButton>
+                </ButtonGroup>
             </div>
         );
     }

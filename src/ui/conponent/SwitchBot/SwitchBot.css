@@ -1,9 +1,3 @@
-.switch-bot-icon{
-    height: 30px;
-    width: 30px;
-    /*filter: invert(1);*/
-}
-
 .switch-bot{
     width: 100%;
     display: flex;
@@ -13,7 +7,7 @@
     padding: .75em;
 }
 
-.switch-bot-list > .switch-bot:not(:last-child) {
+.switch-bot:not(:last-child){
     border-bottom: 1px solid #ccc;
 }
 
@@ -32,7 +26,7 @@
     margin-top: 6px;
 }
 
-.switch-bot-button-container > span{
+.switch-bot-button-name{
     color: #000000;
     font-weight: bold;
     margin-left: auto;
