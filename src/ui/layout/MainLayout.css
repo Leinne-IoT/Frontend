@@ -1,8 +1,9 @@
 .app-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
+    height: 100dvh;
+    overflow-y: auto;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .main-container {
