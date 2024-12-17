@@ -3,6 +3,7 @@
     flex-direction: column;
     height: 100dvh;
     overflow-y: auto;
+    overflow-x: hidden;
     padding-bottom: env(safe-area-inset-bottom);
 }
 
