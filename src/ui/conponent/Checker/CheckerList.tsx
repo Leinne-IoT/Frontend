@@ -18,7 +18,7 @@ const CheckerList = () => {
                     onClick={() => toastInfo('준비중인 기능입니다.')}
                 />
             </ContainerHeader>
-            <Table hover>
+            <Table hover striped>
                 <thead className="text-primary">
                     <tr>
                         <th className="text-center">장소</th>

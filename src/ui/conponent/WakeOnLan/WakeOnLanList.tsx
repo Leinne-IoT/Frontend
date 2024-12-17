@@ -107,7 +107,7 @@ const WakeOnLanList: React.FC = () => {
                     </span>
                 </OverlayTrigger>
             </ContainerHeader>
-            <Table className="wol" hover>
+            <Table className="wol" hover striped>
                 <thead className="text-primary">
                 <tr>
                     <th>
