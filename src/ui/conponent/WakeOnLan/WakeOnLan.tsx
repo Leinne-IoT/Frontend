@@ -1,5 +1,5 @@
 import './WakeOnLan.css';
-import React, {useState} from "react";
+import React from "react";
 import {useAuth} from "../../../feature/provider/AuthProvider.tsx";
 import {toastError, toastInfo} from "../../../feature/utils/toast.tsx";
 import {Button, Form} from "react-bootstrap";
@@ -20,7 +20,6 @@ interface Props{
 
 const WakeOnLan: React.FC<Props> = ({pcData, checked, onChange}) => {
     const {jwtFetch} = useAuth();
-    //const [editMode, setEditMode] = useState(false);
 
     const name = pcData.name || '';
     const address = pcData.address || '';
@@ -40,7 +39,9 @@ const WakeOnLan: React.FC<Props> = ({pcData, checked, onChange}) => {
 
     return (
         <tr>
-            <td><Form.Check checked={checked} onChange={onChange}/></td>
+            <td>
+                <Form.Check checked={checked} onChange={onChange}/>
+            </td>
             <td>{name}</td>
             <td>{address}</td>
             <td className="p-2">
@@ -52,7 +53,7 @@ const WakeOnLan: React.FC<Props> = ({pcData, checked, onChange}) => {
                 />
             </td>
             <td>
-                <BsPencilSquare onClick={() => toastInfo('준비중인 기능입니다.')}/>
+                <BsPencilSquare style={{cursor: "pointer", fontSize: '1.5em'}} onClick={() => toastInfo('준비중인 기능입니다.')}/>
             </td>
         </tr>
     );
