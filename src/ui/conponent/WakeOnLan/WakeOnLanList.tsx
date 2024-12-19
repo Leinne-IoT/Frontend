@@ -82,7 +82,7 @@ const WakeOnLanList: React.FC = () => {
         wolList = wolList.filter((_, index) => checkedRows[index]);
 
         if(wolList.length < 1){
-            toastError('제거할 항목이 선택되지 않았습니다.')
+            toastError('제거할 항목을 선택해주세요.')
             return;
         }
         if(confirm('선택한 항목을 정말로 제거하시겠습니까?')){
