@@ -14,9 +14,9 @@ export const Dashboard: React.FC = () => {
 
     useEffect(() => {
         const size = (width || 0) - 10; // 10px padding
-        // 한 항목당 최소크기 430px로 설정
+        // 한 항목당 최소크기 420px로 설정
         for(let count = 4; count > 1; --count){
-            if(size / 430 >= count){
+            if(size / 420 >= count){
                 setColumnCount(count)
                 return;
             }
