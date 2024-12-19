@@ -33,7 +33,7 @@ const AddWakeOnLanModal: React.FC<Props> = ({visibility, setVisibility, onSubmit
     }
 
     return (
-        <Modal show={visibility} onHide={() => setVisibility(false)} backdrop="static">
+        <Modal show={visibility} onHide={() => setVisibility(false)} backdrop={pcName || macAddress ? "static" : true}>
             <Modal.Header>
                 <Modal.Title>WOL 추가</Modal.Title>
             </Modal.Header>
