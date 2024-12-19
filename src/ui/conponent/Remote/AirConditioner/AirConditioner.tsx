@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, {ReactNode, useState} from "react";
 
-import './AirConditioner.css';
+import './AirConditioner.scss';
 import AirConditionerIcon from "../../../../assets/icon/ac.png";
 import {useStorageState} from "../../../utils/LocalStorage.tsx";
 import {isNumeric, JSONData} from "../../../../utils/utils.ts";
@@ -11,6 +11,30 @@ import ACTimerModal from "../../../modal/ACTimerModal.tsx";
 import {ACReservationModal} from "../../../modal/ACReservationModal/ACReservationModal.tsx";
 import RemoteBase from "../base/RemoteBase.tsx";
 import {BsArrowDown, BsArrowUp} from "react-icons/bs";
+import {toastError} from "../../../../feature/utils/toast.tsx";
+
+interface SensorProps{
+    humidity: any;
+    temperature: any;
+}
+
+const Sensor: React.FC<SensorProps> = ({temperature, humidity}) => {
+    const sensorValues = [
+        ['온도', isNumeric(temperature) ? (+temperature).toFixed(1) + '°C' : '--'],
+        ['습도', isNumeric(humidity) ? (+humidity).toFixed(1) + '%' : '--']
+    ];
+
+    return (
+        <div className="d-flex flex-column justify-content-between" style={{flex: '5'}}>
+            {sensorValues.map((value, index) => (
+                <div className="sensor-data" key={index}>
+                    현재 {value[0]}<br/>
+                    {value[1]}
+                </div>
+            ))}
+        </div>
+    )
+}
 
 const AirConditioner: React.FC = () => {
     const {state} = useData();
@@ -24,7 +48,7 @@ const AirConditioner: React.FC = () => {
     const [speed, setSpeed] = useStorageState('aircon_speed', 4);
     const [temperature, setTemperatureTemp] = useStorageState('aircon_temperature', 26);
 
-    const setPowerAC = (power: boolean) => {
+    const setPowerAC = async (power: boolean) => {
         const json: JSONData = {power};
         if(power){
             json.protocol = protocol;
@@ -32,11 +56,19 @@ const AirConditioner: React.FC = () => {
             json.speed = speed;
             json.temperature = temperature;
         }
-        jwtFetch('/api/remote', {
-            method: 'POST',
-            body: JSON.stringify(json),
-            headers: {"Content-Type": "application/json"},
-        });
+        try{
+            const res = await jwtFetch('/api/remote', {
+                method: 'POST',
+                body: JSON.stringify(json),
+                headers: {"Content-Type": "application/json"},
+            });
+            if(!res.ok){
+                const error = await res.json();
+                toastError(error);
+            }
+        }catch(error: any){
+            toastError(error.message)
+        }
     };
 
     const setTemperature = (temperature: number) => {
@@ -44,24 +76,13 @@ const AirConditioner: React.FC = () => {
         setTemperatureTemp(temperature)
     }
 
-    const sensorValues = [
-        ['온도', isNumeric(state.temperature) ? (+state.temperature).toFixed(1) + '°C' : '--'],
-        ['습도', isNumeric(state.humidity) ? (+state.humidity).toFixed(1) + '%' : '--']
-    ];
     return <RemoteBase>
         <ACTimerModal visibility={timerModal} setVisibility={setTimerModal}/>
         <ACReservationModal visibility={reservationModal} setVisibility={setReservationModal}/>
         <div className="d-flex gap-3" style={{minHeight: '176px'}}>
-            <div className="d-flex flex-column justify-content-between" style={{width: '80px'}}>
-                {sensorValues.map((value, index) => (
-                    <div className="sensor-data" key={index}>
-                        현재 {value[0]}<br/>
-                        {value[1]}
-                    </div>
-                ))}
-            </div>
-            <div className="d-flex flex-column justify-content-between align-items-center" style={{flex: '1'}}>
-                <img src={AirConditionerIcon} alt="에어컨" style={{width: '86px'}}/>
+            {<Sensor temperature={state.temperature} humidity={state.humidity}/>}
+            <div className="d-flex flex-column justify-content-between align-items-center" style={{flex: '13'}}>
+                <img src={AirConditionerIcon} alt="에어컨" className="mt-3" style={{maxWidth: '44%'}}/>
                 <div className="d-flex align-items-center" style={{fontSize: "1.6rem"}}>
                     <div>{temperature}°C</div>
                     <Button
@@ -94,7 +115,7 @@ const AirConditioner: React.FC = () => {
                     </Button>
                 </div>
             </div>
-            <div className="d-flex flex-column gap-1 justify-content-between" style={{width: '80px'}}>
+            <div className="d-flex flex-column gap-1 justify-content-between" style={{flex: '5'}}>
                 <Dropdown>
                     <Dropdown.Toggle variant="outline-primary" id="modeButton" className="w-100">
                         {['자동', '냉방', '난방', '제습', '송풍'][mode]}
