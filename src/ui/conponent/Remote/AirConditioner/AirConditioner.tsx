@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from "react";
+import React, {useState} from "react";
 
 import './AirConditioner.scss';
 import AirConditionerIcon from "../../../../assets/icon/ac.png";
