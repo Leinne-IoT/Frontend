@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "../../common/Container.tsx";
 import ContainerHeader from "../../common/ContainerHeader.tsx";
-import AirConditioner from "./AirConditioner.tsx";
+import AirConditioner from "./AirConditioner/AirConditioner.tsx";
 
 const RemoteList: React.FC = () => {
     return <>

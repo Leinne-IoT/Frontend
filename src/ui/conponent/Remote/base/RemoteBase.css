@@ -1,0 +1,22 @@
+.remote-con{
+    padding: .75em !important;
+}
+
+.remote-con + .remote-con{
+    margin-top: 6px !important;
+}
+
+.remote-con:not(:last-child){
+    border-bottom: 1px solid #ccc;
+}
+
+.remote-con-name{
+    color: black;
+    font-size: 22px;
+    font-weight: bold;
+
+    padding: 6px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
