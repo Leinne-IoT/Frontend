@@ -4,10 +4,11 @@ import {useData} from "../../../feature/provider/DataProvider.tsx";
 import {AuthStatus, useAuth} from "../../../feature/provider/AuthProvider.tsx";
 
 interface HeaderProps {
+    expanded: boolean;
     onToggleSidebar: () => void;
 }
 
-const Header: FC<HeaderProps> = ({onToggleSidebar}) => {
+const Header: FC<HeaderProps> = ({expanded, onToggleSidebar}) => {
     const {state} = useData();
     const {setAuthStatus} = useAuth();
     const [showDropdown, setShowDropdown] = useState(false);
@@ -38,9 +39,9 @@ const Header: FC<HeaderProps> = ({onToggleSidebar}) => {
     return (
         <header className="header">
             <div className="header-left">
-                <button className="sidebar-toggle-btn" onClick={onToggleSidebar}>
+                {!expanded && <button className="sidebar-toggle-btn" onClick={onToggleSidebar}>
                     ☰
-                </button>
+                </button>}
                 <div className="header-title">IOT WEBPAGE</div>
             </div>
             <div className="profile-container" onClick={handleUserClick}>
