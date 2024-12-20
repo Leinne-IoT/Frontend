@@ -1,0 +1,59 @@
+$sidebar-width: 200px;
+
+.sidebar{
+    display: flex;
+    flex-direction: column;
+
+    width: $sidebar-width;
+    height: 100vh;
+    padding: 16px;
+    background-color: #f4f4f4;
+
+    top: 0;
+    left: 0;
+    position: absolute; /* 레이아웃 흐름에서 제외 */
+
+    transform: translateX(0); /* 기본 위치 */
+    transition: transform 0.25s ease; /* 부드러운 애니메이션 */
+
+    &.closed{
+        transform: translateX(-100%);
+    }
+
+    > *{
+        height: 40px;
+        cursor: pointer;
+        padding-left: 6px;
+        border-radius: 6px;
+        align-content: center;
+        transition: background 0.4s ease;
+        color: #000;
+        text-decoration: none;
+
+        & + &{
+            margin-top: 4px;
+        }
+
+        &:hover{
+            background: #adadad;
+        }
+    }
+
+    > .active{
+        cursor: default;
+        background: #adadad;
+    }
+}
+
+.main-container{
+    transform: translateX(0);
+    transition: transform 0.25s ease, margin-left 0.25s ease; /* 부드러운 애니메이션 */
+
+    &.slider{
+        transform: translateX($sidebar-width); /* 기본 위치 */
+    }
+
+    &.expanded{
+        margin-left: $sidebar-width; /* 기본적으로 사이드바의 너비만큼 여백 */
+    }
+}
