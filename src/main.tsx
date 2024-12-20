@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
 import {ToastContainer} from "react-toastify";
+import {CandlestickController} from "chartjs-chart-financial";
 
 import App from './ui/layout/app/App.tsx'
 import {DataProvider} from "./feature/provider/DataProvider.tsx";

@@ -4,10 +4,7 @@
     text-align: center;
     align-content: center;
     aspect-ratio: 1;
-
-    & + &{
-        margin-top: .6em;
-    }
+    max-height: calc(50% - .25em);
 }
 
 .ac-temp-button{

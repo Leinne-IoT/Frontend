@@ -25,7 +25,7 @@ const Sensor: React.FC<SensorProps> = ({temperature, humidity}) => {
     ];
 
     return (
-        <div className="d-flex flex-column justify-content-between" style={{flex: '5'}}>
+        <div className="d-flex flex-column justify-content-between gap-2" style={{flex: '5'}}>
             {sensorValues.map((value, index) => (
                 <div className="sensor-data" key={index}>
                     현재 {value[0]}<br/>
@@ -79,7 +79,7 @@ const AirConditioner: React.FC = () => {
     return <RemoteBase>
         <ACTimerModal visibility={timerModal} setVisibility={setTimerModal}/>
         <ACReservationModal visibility={reservationModal} setVisibility={setReservationModal}/>
-        <div className="d-flex gap-3" style={{minHeight: '176px'}}>
+        <div className="d-flex gap-3" style={{minHeight: '176px', maxHeight: '200px'}}>
             {<Sensor temperature={state.temperature} humidity={state.humidity}/>}
             <div className="d-flex flex-column justify-content-between align-items-center" style={{flex: '13'}}>
                 <img src={AirConditionerIcon} alt="에어컨" className="mt-3" style={{maxWidth: '44%'}}/>
@@ -120,7 +120,7 @@ const AirConditioner: React.FC = () => {
                     <Dropdown.Toggle variant="outline-primary" id="modeButton" className="w-100">
                         {['자동', '냉방', '난방', '제습', '송풍'][mode]}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu>
+                    <Dropdown.Menu className="shadow">
                         {['냉방', '난방', '제습', '송풍'].map((text, index) =>
                             <Dropdown.Item
                                 key={index}
@@ -140,7 +140,7 @@ const AirConditioner: React.FC = () => {
                     <Dropdown.Toggle variant="outline-success" id="speedButton" className="w-100">
                         {['강', '중', '약'][4 - speed] || '자동'}
                     </Dropdown.Toggle>
-                    <Dropdown.Menu>
+                    <Dropdown.Menu className="shadow">
                         {['강', '중', '약'].map((text, index) =>
                             <Dropdown.Item
                                 key={index}
