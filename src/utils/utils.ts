@@ -17,14 +17,6 @@ export const isNumeric = (data: any) => {
     return !isNaN(data) && isFinite(data);
 }
 
-export const lshift = (value: number, bit: number) => {
-    return value * Math.pow(2, bit);
-}
-
-export const sleep = (millis: number): Promise<void> => {
-    return new Promise(resolve => setTimeout(resolve, millis));
-}
-
 export const tryParseJson = (data: any) => {
     let json;
     if(data && typeof data === 'string'){
