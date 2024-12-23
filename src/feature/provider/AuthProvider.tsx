@@ -1,5 +1,5 @@
 import {FC, createContext, useRef, useState, useContext, useEffect, ReactNode, Dispatch, SetStateAction} from 'react';
-import {isNumeric, isObject, tryParseJson} from '../../utils/utils.ts';
+import {isArray, isNumeric, isObject, tryParseJson} from '../../utils/utils.ts';
 import {useData} from './DataProvider.tsx';
 
 export enum AuthStatus{
@@ -63,7 +63,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
                 .then(async (res) => {
                     setAuthStatus(res.ok ? AuthStatus.TRUE : AuthStatus.FALSE)
                     const user = await res.json();
-                    dispatch({key: 'profile', value: user})
+                    dispatch({profile: user})
                 })
                 .catch(() => setAuthStatus(AuthStatus.FALSE));
         }
@@ -80,30 +80,12 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
             webSocket.addEventListener('open', () => webSocket.send(JSON.stringify({method: 'JOIN_CLIENT'})));
             webSocket.addEventListener('message', (event) => {
                 const data = tryParseJson(event.data);
-                if(isNumeric(data.humidity)){
-                    dispatch({
-                        key: 'humidity',
-                        value: isNumeric(data.humidity) && data.humidity > 0 ? data.humidity : null
-                    });
-                }
-                if(isNumeric(data.temperature)){
-                    dispatch({
-                        key: 'temperature',
-                        value: isNumeric(data.temperature) && data.temperature > 0 ? data.temperature : null
-                    });
-                }
-                if(isObject(data.switchBotList)){
-                    dispatch({
-                        key: 'switchBotList',
-                        value: data.switchBotList
-                    })
-                }
-                if(isObject(data.checkerList)){
-                    dispatch({
-                        key: 'checkerList',
-                        value: data.checkerList
-                    })
-                }
+                dispatch({
+                    humidity: isNumeric(data.humidity) && data.humidity > 0 ? +data.humidity : undefined,
+                    temperature: isNumeric(data.temperature) && data.temperature > 0 ? +data.temperature : undefined,
+                    checkerList: isArray(data.checkerList) ? data.checkerList : undefined,
+                    switchBotList: isArray(data.switchBotList) ? data.switchBotList : undefined,
+                });
 
                 if(isObject(data.device)){
                     dispatch(before => {
@@ -112,7 +94,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
                         if(id > -1){
                             list[id] = {...list[id], ...data.switchBot};
                         }
-                        return {key: 'switchBotList', value: list};
+                        return {switchBotList: list};
                     });
                 }
                 if(isObject(data.checker)){
@@ -124,7 +106,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
                         }else{
                             list[id] = {...list[id], ...data.checker};
                         }
-                        return {key: 'checkerList', value: list};
+                        return {checkerList: list};
                     });
                 }
                 if(isObject(data.switchBot)){
@@ -136,7 +118,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
                         }else{
                             list[id] = {...list[id], ...data.switchBot};
                         }
-                        return {key: 'switchBotList', value: list};
+                        return {switchBotList: list};
                     });
                 }
             });

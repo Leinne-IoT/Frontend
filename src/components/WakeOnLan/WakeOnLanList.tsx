@@ -17,7 +17,7 @@ const WakeOnLanList: React.FC = () => {
     const [allChecked, setAllChecked] = useState(false);
     const [checkedRows, setCheckedRows] = useState<boolean[]>([]);
 
-    const setWolList = (value: JSONData) => dispatch({key: 'wolList', value});
+    const setWolList = (value: JSONData) => dispatch({wolList: value});
 
     // 전체 체크박스 상태 변경
     const handleAllCheckedChange = () => {
@@ -43,7 +43,7 @@ const WakeOnLanList: React.FC = () => {
                 .then(async res => setWolList(await res.json()))
                 .catch(error => {
                     console.error(error)
-                    dispatch({key: 'wolList', value: undefined});
+                    dispatch({wolList: undefined});
                 });
         }
     }, []);
@@ -86,7 +86,7 @@ const WakeOnLanList: React.FC = () => {
             return;
         }
         if(confirm('선택한 항목을 정말로 제거하시겠습니까?')){
-            toastInfo('준비중인 기능입니다.');
+            toastInfo('제거에 실패했습니다.');
         }
     }
 

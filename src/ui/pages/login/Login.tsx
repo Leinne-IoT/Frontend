@@ -32,7 +32,7 @@ export const Login: FC = () => {
             const jsonData = await res.json();
             if(res.ok){
                 setAuthStatus(AuthStatus.TRUE);
-                dispatch({key: 'profile', value: jsonData})
+                dispatch({profile: jsonData})
             }else{
                 toastError(message);
                 setAuthStatus(AuthStatus.FALSE);

@@ -1,14 +1,11 @@
 import React, {createContext, useReducer, useContext, ReactNode, Dispatch} from 'react';
 import {JSONData} from '../../utils/utils.ts';
 
-interface DataAction{
-    key: string;
-    value: any;
-}
+type ActionData = JSONData | ((state: JSONData) => JSONData);
 
 interface DataContextProps{
     state: JSONData;
-    dispatch: Dispatch<DataAction | ((state: JSONData) => DataAction)>;
+    dispatch: Dispatch<ActionData>;
 }
 
 export const useData = (): DataContextProps => {
@@ -21,12 +18,12 @@ export const useData = (): DataContextProps => {
 
 const DataContext = createContext<DataContextProps | undefined>(undefined);
 
-const dataReducer = (state: JSONData, action: any): JSONData => {
-    action = typeof action === 'function' ? action(state) : action;
-    return {
-        ...state,
-        [action.key]: action.value
-    };
+const dataReducer = (state: JSONData, action: ActionData): JSONData => {
+    if(typeof action === 'function'){
+        const newValue = action(state);
+        return {...state, ...newValue};
+    }
+    return {...state, ...action};
 }
 
 interface DataProviderProps {
