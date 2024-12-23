@@ -17,8 +17,8 @@ const MainLayout: FC<Props> = ({routeList, children}) => {
 
     useEffect(() => {
         const handleResize = () => {
-            const before = windowWidth >= 700; // 컴포넌트 최소 420px, 사이드바 200px, 스크롤바 포함 대략 720px 감소
-            const current = window.innerWidth >= 700;
+            const before = windowWidth >= 1100; // 컴포넌트 최소 400px x 2, 사이드바 200px, 스크롤바 포함 대략 1100px
+            const current = window.innerWidth >= 1100;
             if(!before && current){ // 작았지만 확장이 가능해진 경우
                 setSidebar(true);
             }else if(before && !current){
