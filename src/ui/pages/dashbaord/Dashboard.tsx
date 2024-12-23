@@ -11,7 +11,7 @@ import ChartComponent from "../../../components/Chart/ChartComponent.tsx";
 
 export const Dashboard: React.FC = () => {
     const {width, ref} = useResizeDetector();
-    const [columnCount, setColumnCount] = useState(4);
+    const [columnCount, setColumnCount] = useState(0);
 
     useEffect(() => {
         const size = (width || 0) - 10; // 10px padding
@@ -26,7 +26,7 @@ export const Dashboard: React.FC = () => {
     }, [width]);
 
     return <div ref={ref}>
-        <Masonry
+        {columnCount <= 0 || <Masonry
             className="iot-container"
             columnClassName="column"
             breakpointCols={columnCount}
@@ -35,6 +35,8 @@ export const Dashboard: React.FC = () => {
             <RemoteList/>
             <CheckerList/>
             <WakeOnLanList/>
-        </Masonry>
+            <ChartComponent/>
+            <ChartComponent/>
+        </Masonry>}
     </div>
 }
