@@ -17,7 +17,7 @@ export const CheckerInfoModal: React.FC<Props> = ({visibility, setVisibility, de
 
     const updateHistory = async () => {
         try{
-            const res = await jwtFetch(`/data/checker?history=true&device=${device.id}`, {method: 'POST'});
+            const res = await jwtFetch(`/data/checker?history=true&device_id=${device.id}`, {method: 'POST'});
             const list = [];
             const jsonData = await res.json();
             for(const index in jsonData){
