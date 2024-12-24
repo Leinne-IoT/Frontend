@@ -1,7 +1,14 @@
 import React, {createContext, useReducer, useContext, ReactNode, Dispatch} from 'react';
 import {JSONData} from '../../utils/utils.ts';
+import {SwitchBotDevice, CheckerDevice} from "../component/device.ts";
 
-type ActionData = JSONData | ((state: JSONData) => JSONData);
+export interface AppState{
+    humidity?: number;
+    temperature?: number;
+    checkerList?: CheckerDevice[];
+    switchBotList?: SwitchBotDevice[];
+    [key: string]: any;
+}
 
 interface DataContextProps{
     state: JSONData;
@@ -18,7 +25,8 @@ export const useData = (): DataContextProps => {
 
 const DataContext = createContext<DataContextProps | undefined>(undefined);
 
-const dataReducer = (state: JSONData, action: ActionData): JSONData => {
+type ActionData = AppState | ((state: AppState) => AppState);
+const dataReducer = (state: AppState, action: ActionData): AppState => {
     if(typeof action === 'function'){
         const newValue = action(state);
         return {...state, ...newValue};

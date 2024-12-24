@@ -1,6 +1,6 @@
 import {FC, createContext, useRef, useState, useContext, useEffect, ReactNode, Dispatch, SetStateAction} from 'react';
 import {isArray, isNumeric, isObject, tryParseJson} from '../../utils/utils.ts';
-import {useData} from './DataProvider.tsx';
+import {AppState, useData} from './DataProvider.tsx';
 
 export enum AuthStatus{
     NONE = -2,      // 미설정
@@ -80,17 +80,25 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
             webSocket.addEventListener('open', () => webSocket.send(JSON.stringify({method: 'JOIN_CLIENT'})));
             webSocket.addEventListener('message', (event) => {
                 const data = tryParseJson(event.data);
-                dispatch({
-                    humidity: isNumeric(data.humidity) && data.humidity > 0 ? +data.humidity : undefined,
-                    temperature: isNumeric(data.temperature) && data.temperature > 0 ? +data.temperature : undefined,
-                    checkerList: isArray(data.checkerList) ? data.checkerList : undefined,
-                    switchBotList: isArray(data.switchBotList) ? data.switchBotList : undefined,
-                });
+                const dispatchData: AppState = {};
+                if(isArray(data.checkerList)){
+                    dispatchData.checkerList = data.checkerList;
+                }
+                if(isArray(data.switchBotList)){
+                    dispatchData.switchBotList = data.switchBotList;
+                }
+                if(isNumeric(data.humidity)){
+                    dispatchData.humidity = Math.max(data.humidity, 0);
+                }
+                if(isNumeric(data.temperature)){
+                    dispatchData.temperature = Math.max(data.temperature, 0);
+                }
+                dispatch(dispatchData)
 
                 if(isObject(data.device)){
                     dispatch(before => {
                         const list = before.switchBotList || [];
-                        const id = list.findIndex((switchBot: any) => switchBot.id === data.device.id);
+                        const id = list.findIndex((switchBot) => switchBot.id === data.device.id);
                         if(id > -1){
                             list[id] = {...list[id], ...data.switchBot};
                         }
@@ -100,7 +108,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
                 if(isObject(data.checker)){
                     dispatch(before => {
                         const list = before.checkerList || [];
-                        const id = list.findIndex((checker: any) => checker.id === data.checker.id);
+                        const id = list.findIndex((checker) => checker.id === data.checker.id);
                         if(id < 0){
                             list.push(data.checker);
                         }else{
@@ -112,7 +120,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
                 if(isObject(data.switchBot)){
                     dispatch(before => {
                         const list = before.switchBotList || [];
-                        const id = list.findIndex((switchBot: any) => switchBot.id === data.switchBot.id);
+                        const id = list.findIndex((switchBot) => switchBot.id === data.switchBot.id);
                         if(id < 0){
                             list.push(data.switchBot);
                         }else{
