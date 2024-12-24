@@ -1,6 +1,7 @@
 import React from "react";
 import {Table} from "react-bootstrap";
-import Checker, {CheckerDevice} from "./Checker.tsx";
+import Checker from "./Checker.tsx";
+import {CheckerDevice} from "../../feature/component/device.ts";
 
 interface TableProps {
     list: CheckerDevice[]

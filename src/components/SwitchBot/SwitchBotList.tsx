@@ -1,10 +1,11 @@
-import SwitchBot, {SwitchBotDevice} from "./SwitchBot.tsx";
+import SwitchBot from "./SwitchBot.tsx";
 import React from "react";
 import {BsPencilSquare} from "react-icons/bs";
 import Container from "../base/Container.tsx";
 import ContainerHeader from "../base/ContainerHeader.tsx";
 import {useData} from "../../feature/provider/DataProvider.tsx";
 import {toastInfo} from "../../feature/utils/toast.tsx";
+import {SwitchBotDevice} from "../../feature/component/device.ts";
 
 const SwitchBotList: React.FC = () => {
     const {state} = useData();

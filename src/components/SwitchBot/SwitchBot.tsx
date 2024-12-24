@@ -2,14 +2,7 @@ import './SwitchBot.scss';
 import React from "react";
 import {ButtonGroup, ToggleButton} from "react-bootstrap";
 import {toastError} from "../../feature/utils/toast.tsx";
-
-export interface SwitchBotDevice{
-    id: string; // 기기 ID
-    name: string; // 기기 이름
-    connected: boolean; // 기기 연결 상태
-    switch: {[channel: number]: boolean}; // 채널별 on/off 상태
-    switchName?: {[channel: number]: string}; // 채널별 스위치 이름
-}
+import {SwitchBotDevice} from "../../feature/component/device.ts";
 
 interface Props {
     device: SwitchBotDevice

@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {CheckerDevice} from "./Checker.tsx";
 import CheckerHistoryTable from "./CheckerHistoryTable.tsx";
 import {Button, Modal, Pagination} from "react-bootstrap";
 import {toastError} from "../../feature/utils/toast.tsx";
 import {useAuth} from "../../feature/provider/AuthProvider.tsx";
+import {CheckerDevice} from "../../feature/component/device.ts";
 
 interface Props{
     visibility: boolean;

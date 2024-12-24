@@ -2,15 +2,7 @@ import './Checker.css';
 import React, {useState} from "react";
 import {dateToString} from "../../utils/utils.ts";
 import {CheckerInfoModal} from "./CheckerInfoModal.tsx";
-
-export interface CheckerDevice{
-    id: string; // 기기 ID
-    name: string; // 기기 이름
-    open: boolean; // 열림/닫힘 여부
-    battery: number; // 잔여 배터리량
-    recordDate?: Date; // 가장 최근 날짜
-    number?: number; // history number 입니다. 없다면 대시보드 위젯입니다
-}
+import {CheckerDevice} from "../../feature/component/device.ts";
 
 interface Props {
     device: CheckerDevice;
