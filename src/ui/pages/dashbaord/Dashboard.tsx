@@ -7,22 +7,19 @@ import SwitchBotList from "../../../components/SwitchBot/SwitchBotList.tsx";
 import RemoteList from "../../../components/Remote/RemoteList.tsx";
 import CheckerList from "../../../components/Checker/CheckerList.tsx";
 import WakeOnLanList from "../../../components/WakeOnLan/WakeOnLanList.tsx";
-import ChartComponent from "../../../components/Chart/ChartComponent.tsx";
+import TemperatureChart from "../../../components/Sensor/TemperatureChart.tsx";
+
+const PADDING = 10; // 패딩 값
+const MIN_COLUMN_WIDTH = 410; // 최소 항목 크기
 
 export const Dashboard: React.FC = () => {
     const {width, ref} = useResizeDetector();
     const [columnCount, setColumnCount] = useState(0);
 
     useEffect(() => {
-        const size = (width || 0) - 10; // 10px padding
-        // 한 항목당 최소크기 400px로 설정
-        for(let count = 4; count > 1; --count){
-            if(size / 400 >= count){
-                setColumnCount(count)
-                return;
-            }
-        }
-        setColumnCount(1)
+        const adjustedWidth = Math.max((width ?? 0) - PADDING, 0); // 유효한 width 처리
+        console.log('adjustedWidth: ', width);
+        setColumnCount(Math.min(4, Math.max(1, Math.floor(adjustedWidth / MIN_COLUMN_WIDTH)))); // 최대 열 개수 4개 제한
     }, [width]);
 
     return <div ref={ref}>
@@ -35,8 +32,8 @@ export const Dashboard: React.FC = () => {
             <RemoteList/>
             <CheckerList/>
             <WakeOnLanList/>
-            <ChartComponent/>
-            <ChartComponent/>
+            <TemperatureChart/>
+            <TemperatureChart/>
         </Masonry>}
     </div>
 }

@@ -5,39 +5,36 @@ import './MainLayout.css';
 import classNames from "classnames";
 import Sidebar, {RouteData} from "../sidebar/Sidebar.tsx";
 import Header from "../header/Header.tsx";
+import {useResizeDetector} from "react-resize-detector";
 
 interface Props {
     children: ReactNode;
     routeList?: RouteData[];
 }
 
-const MIN_WIDTH = 1100;
+const PADDING = 10; // 패딩 값
+const SIDEBAR_WIDTH = 240; // 추가 여유 공간 기준
+const COMPONENT_WIDTH = 410; // 400px + 10px padding
 
 const MainLayout: FC<Props> = ({routeList, children}) => {
-    const [sidebar, setSidebar] = useState(window.innerWidth >= MIN_WIDTH);
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const {width, ref} = useResizeDetector();
+    const [sidebar, setSidebar] = useState(false);
+    const [expanded, setExpanded] = useState(true);
 
     useEffect(() => {
-        const handleResize = () => {
-            const before = windowWidth >= MIN_WIDTH; // 컴포넌트 최소 400px x 2, 사이드바 200px, 스크롤바 포함 대략 1100px
-            const current = window.innerWidth >= MIN_WIDTH;
-            if(!before && current){ // 작았지만 확장이 가능해진 경우
-                setSidebar(true);
-            }else if(before && !current){
-                setSidebar(false);
-            }
-            setWindowWidth(window.innerWidth);
-        };
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [windowWidth]);
+        const adjustedWidth = Math.max((width ?? 0) - PADDING, 0); // 유효한 width 처리
+        console.log('fullWidth: ', adjustedWidth);
+        const count = Math.floor(adjustedWidth / COMPONENT_WIDTH);
+        const canExpanded = adjustedWidth - (count * COMPONENT_WIDTH) >= SIDEBAR_WIDTH; // 사이드바 확장 가능여부 확인
+        setSidebar(canExpanded);
+        setExpanded(canExpanded);
+    }, [width]);
 
-    const canExpanded = windowWidth >= MIN_WIDTH;
     return (
-        <div className="app-container">
+        <div className="app-container" ref={ref}>
             <Sidebar isOpen={sidebar} routeList={routeList}/>
-            <div className={classNames(`main-container`, {'expanded': canExpanded, 'slider': !canExpanded && sidebar})}>
-                <Header expanded={canExpanded} onToggleSidebar={() => setSidebar(!sidebar)}/>
+            <div className={classNames(`main-container`, {'expanded': expanded, 'slider': !expanded && sidebar})}>
+                <Header expanded={expanded} onToggleSidebar={() => setSidebar(!sidebar)}/>
                 <div className="main-content">
                     {children}
                 </div>
