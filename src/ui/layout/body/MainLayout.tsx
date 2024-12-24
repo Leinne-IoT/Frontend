@@ -11,14 +11,16 @@ interface Props {
     routeList?: RouteData[];
 }
 
+const MIN_WIDTH = 1100;
+
 const MainLayout: FC<Props> = ({routeList, children}) => {
-    const [sidebar, setSidebar] = useState(window.innerWidth >= 720);
+    const [sidebar, setSidebar] = useState(window.innerWidth >= MIN_WIDTH);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     useEffect(() => {
         const handleResize = () => {
-            const before = windowWidth >= 1100; // 컴포넌트 최소 400px x 2, 사이드바 200px, 스크롤바 포함 대략 1100px
-            const current = window.innerWidth >= 1100;
+            const before = windowWidth >= MIN_WIDTH; // 컴포넌트 최소 400px x 2, 사이드바 200px, 스크롤바 포함 대략 1100px
+            const current = window.innerWidth >= MIN_WIDTH;
             if(!before && current){ // 작았지만 확장이 가능해진 경우
                 setSidebar(true);
             }else if(before && !current){
@@ -30,7 +32,7 @@ const MainLayout: FC<Props> = ({routeList, children}) => {
         return () => window.removeEventListener('resize', handleResize);
     }, [windowWidth]);
 
-    const canExpanded = windowWidth >= 700;
+    const canExpanded = windowWidth >= MIN_WIDTH;
     return (
         <div className="app-container">
             <Sidebar isOpen={sidebar} routeList={routeList}/>
