@@ -17,9 +17,8 @@ export const Dashboard: React.FC = () => {
     const [columnCount, setColumnCount] = useState(0);
 
     useEffect(() => {
-        const adjustedWidth = Math.max((width ?? 0) - PADDING, 0); // 유효한 width 처리
-        console.log('adjustedWidth: ', width);
-        setColumnCount(Math.min(4, Math.max(1, Math.floor(adjustedWidth / MIN_COLUMN_WIDTH)))); // 최대 열 개수 4개 제한
+        const adjustedWidth = Math.max((width ?? 0) - PADDING, 0);
+        setColumnCount(Math.min(4, Math.max(1, Math.floor(adjustedWidth / MIN_COLUMN_WIDTH))));
     }, [width]);
 
     return <div ref={ref}>

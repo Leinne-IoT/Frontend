@@ -22,10 +22,9 @@ const MainLayout: FC<Props> = ({routeList, children}) => {
     const [expanded, setExpanded] = useState(true);
 
     useEffect(() => {
-        const adjustedWidth = Math.max((width ?? 0) - PADDING, 0); // 유효한 width 처리
-        console.log('fullWidth: ', adjustedWidth);
+        const adjustedWidth = Math.max((width ?? 0) - PADDING, 0);
         const count = Math.floor(adjustedWidth / COMPONENT_WIDTH);
-        const canExpanded = adjustedWidth - (count * COMPONENT_WIDTH) >= SIDEBAR_WIDTH; // 사이드바 확장 가능여부 확인
+        const canExpanded = count > 3 || adjustedWidth - (count * COMPONENT_WIDTH) >= SIDEBAR_WIDTH;
         setSidebar(canExpanded);
         setExpanded(canExpanded);
     }, [width]);
