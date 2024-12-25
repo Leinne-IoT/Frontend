@@ -12,8 +12,8 @@ interface Props{
 }
 
 export const ACReservationModal: React.FC<Props> = ({visibility, setVisibility}) => {
-    const [selectedDayList, setSelectedDayList] = useState<string[]>([]);
     const [time, setTime] = useState('');
+    const [selectedDayList, setSelectedDayList] = useState<string[]>([]);
 
     const handleDayClick = (day: string) => {
         setSelectedDayList(prev => prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]);
@@ -27,7 +27,7 @@ export const ACReservationModal: React.FC<Props> = ({visibility, setVisibility})
     }, [visibility]);
 
     return (
-        <Modal show={visibility} onHide={() => setVisibility(false)} backdrop="static">
+        <Modal show={visibility} onHide={() => setVisibility(false)} backdrop={(time || selectedDayList.length > 0) ? "static" : true}>
             <Modal.Header>
                 <Modal.Title>에어컨 예약</Modal.Title>
             </Modal.Header>
