@@ -11,6 +11,14 @@ export default defineConfig({
                 target: 'http://localhost:8080',
                 changeOrigin: true
             },
+            '/checker': {
+                target: 'http://localhost:8080',
+                changeOrigin: true
+            },
+            '/switch_bot': {
+                target: 'http://localhost:8080',
+                changeOrigin: true
+            },
             '/notify': {
                 target: 'http://localhost:8080',
                 changeOrigin: true

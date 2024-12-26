@@ -1,14 +1,17 @@
 import './SwitchBot.scss';
-import React from "react";
-import {ButtonGroup, ToggleButton} from "react-bootstrap";
+import React, {useState} from "react";
+import {Button, ButtonGroup, ToggleButton} from "react-bootstrap";
 import {toastError} from "../../feature/utils/toast.tsx";
 import {SwitchBotDevice} from "../../feature/component/device.ts";
+import {SwitchBotInfoModal} from "./SwitchBotInfoModal.tsx";
 
 interface Props {
     device: SwitchBotDevice
 }
 
 const SwitchBot: React.FC<Props> = ({device}) => {
+    const [modal, setModal] = useState(false);
+
     const onClick = (channel: number) => {
         fetch('/api/switch', {
             method: 'POST',
@@ -26,8 +29,8 @@ const SwitchBot: React.FC<Props> = ({device}) => {
                 }
             })
             .catch((error) => {
-                toastError(<>스위치 조작에 실패했습니다.</>)
                 console.error(error)
+                toastError(<>스위치 조작에 실패했습니다.</>)
             });
     };
 
@@ -59,16 +62,18 @@ const SwitchBot: React.FC<Props> = ({device}) => {
             </div>
         );
     }
-    return (
-        <div className="switch-bot">
+    return <>
+        <SwitchBotInfoModal visibility={modal} setVisibility={setModal} device={device}/>
+        <div className="switch-bot" >
             <div className='switch-bot-name'>
                 <span style={{color: 'red'}}>{device.connected ? '' : '!'}</span>
                 {device.name}
+                <Button size="sm" onClick={() => setModal(true)} variant="secondary">H</Button>
             </div>
             <div className="align-items-center ms-auto">
                 {switchButtonList}
             </div>
         </div>
-    );
+    </>;
 };
 export default SwitchBot;
