@@ -17,6 +17,9 @@ importers:
       chart.js:
         specifier: ^4.4.7
         version: 4.4.7
+      chartjs-chart-financial:
+        specifier: ^0.2.1
+        version: 0.2.1(chart.js@4.4.7)
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -822,6 +825,11 @@ packages:
   chart.js@4.4.7:
     resolution: {integrity: sha512-pwkcKfdzTMAU/+jNosKhNL2bHtJc/sSmYgVbuGTEDhzkrhmyihmP7vUc/5ZK9WopidMDHNe3Wm7jOd/WhuHWuw==}
     engines: {pnpm: '>=8'}
+
+  chartjs-chart-financial@0.2.1:
+    resolution: {integrity: sha512-RI3zrszyf2YdW7ME8I5XDsicy6YaU+uA1XZmGddR3rdcQlGf4pSgGFK8O0PWPO5Szdc8wZ8qpns++yib6pWBaw==}
+    peerDependencies:
+      chart.js: ^4.0.0
 
   chokidar@4.0.1:
     resolution: {integrity: sha512-n8enUVCED/KVRQlab1hr3MVpcVMvxtZjmEa956u+4YijlmQED223XMSYj2tLuKvr4jcCTzNNMpQDUer72MMmzA==}
@@ -2203,6 +2211,10 @@ snapshots:
   chart.js@4.4.7:
     dependencies:
       '@kurkle/color': 0.3.4
+
+  chartjs-chart-financial@0.2.1(chart.js@4.4.7):
+    dependencies:
+      chart.js: 4.4.7
 
   chokidar@4.0.1:
     dependencies:
