@@ -14,8 +14,7 @@ const SwitchBot: React.FC<Props> = ({device}) => {
             method: 'POST',
             body: JSON.stringify({
                 id: device.id,
-                channel,
-                state: !device.switch[channel]
+                state: {[channel]: !device.switch[channel]}
             }),
             credentials: 'include',
             headers: {"Content-Type": "application/json"},
