@@ -13,16 +13,20 @@ interface Props{
 
 export const CheckerInfoModal: React.FC<Props> = ({visibility, setVisibility, device}) => {
     const {jwtFetch} = useAuth();
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
     const [checkerHistory, setCheckerHistory] = useState<CheckerDevice[]>([]);
 
     const updateHistory = async () => {
         try{
-            const res = await jwtFetch(`/data/checker?history=true&device_id=${device.id}`, {method: 'POST'});
+            const res = await jwtFetch(`/checker/history?device_id=${device.id}&page=${page}`);
             const list = [];
             const jsonData = await res.json();
-            for(const index in jsonData){
-                const history = jsonData[index];
-                history.number = +index + 1;
+            console.log(jsonData);
+            setTotalPages(Math.min(10, jsonData.totalPages));
+            for(const index in jsonData.data){
+                const history = jsonData.data[index];
+                history.number = +index + 1 + (page - 1) * 10;
                 list.push(history);
             }
             setCheckerHistory(list)
@@ -32,15 +36,10 @@ export const CheckerInfoModal: React.FC<Props> = ({visibility, setVisibility, de
     }
 
     useEffect(() => {
-        if(visibility && checkerHistory.length < 1){
-            updateHistory();
+        if(visibility){
+            updateHistory().then();
         }
-    }, [visibility]);
-
-    useEffect(() => { // 5분 주기로 창문 상태 갱신, 추후 개선 예정
-        const interval = setInterval(updateHistory, 1000 * 60 * 5);
-        return () => clearInterval(interval);
-    }, []);
+    }, [visibility, page]);
 
     return (
         <Modal show={visibility} onHide={() => setVisibility(false)}>
@@ -50,10 +49,9 @@ export const CheckerInfoModal: React.FC<Props> = ({visibility, setVisibility, de
             <Modal.Body>
                 <CheckerHistoryTable list={checkerHistory}/>
                 <Pagination className="justify-content-center mb-0 mt-2">
-                    <Pagination.Item active>1</Pagination.Item>
-                    {new Array(9).fill('').map((_, index) => (
-                        <Pagination.Item key={index}>
-                            {index + 2}
+                    {new Array(totalPages).fill('').map((_, index) => (
+                        <Pagination.Item key={index} active={index + 1 === page} onClick={() => setPage(index + 1)}>
+                            {index + 1}
                         </Pagination.Item>
                     ))}
                 </Pagination>
