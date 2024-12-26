@@ -18,7 +18,7 @@ const SwitchBotList: React.FC = () => {
                 />
             </ContainerHeader>
             <div>
-                {switchBotList.map((sw: any, i: number) => <SwitchBot key={i} device={sw}/>)}
+                {switchBotList.map((sw, i) => <SwitchBot key={i} device={sw}/>)}
             </div>
         </Container>
     </>;
