@@ -8,6 +8,7 @@ import RemoteList from "../../../components/Remote/RemoteList.tsx";
 import CheckerList from "../../../components/Checker/CheckerList.tsx";
 import WakeOnLanList from "../../../components/WakeOnLan/WakeOnLanList.tsx";
 import TemperatureChart from "../../../components/Sensor/TemperatureChart.tsx";
+import HumidityChart from "../../../components/Sensor/HumidityChart.tsx";
 
 const PADDING = 10; // 패딩 값
 const MIN_COLUMN_WIDTH = 410; // 최소 항목 크기
@@ -32,7 +33,7 @@ export const Dashboard: React.FC = () => {
             <CheckerList/>
             <WakeOnLanList/>
             <TemperatureChart/>
-            <TemperatureChart/>
+            <HumidityChart/>
         </Masonry>}
     </div>
 }
