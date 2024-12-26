@@ -4,16 +4,10 @@ import {Button, Form} from "react-bootstrap";
 import {BsPencilSquare} from "react-icons/bs";
 import {useAuth} from "../../feature/provider/AuthProvider.tsx";
 import {toastError, toastInfo} from "../../feature/utils/toast.tsx";
-
-interface PC{
-    id: number;
-    name: string;
-    address: string;
-    connected: boolean;
-}
+import {WakeOnLanPC} from "../../feature/component/device.ts";
 
 interface Props{
-    pcData: PC;
+    pcData: WakeOnLanPC;
     checked: boolean;
     onChange: () => any;
 }

@@ -4,11 +4,12 @@ import WakeOnLan from "./WakeOnLan.tsx";
 import {BiPlus, BiTrash} from "react-icons/bi";
 import {useAuth} from "../../feature/provider/AuthProvider.tsx";
 import {useData} from "../../feature/provider/DataProvider.tsx";
-import {isArray, JSONData} from "../../utils/utils.ts";
-import {toastError, toastInfo} from "../../feature/utils/toast.tsx";
+import {isArray} from "../../utils/utils.ts";
+import {toastError} from "../../feature/utils/toast.tsx";
 import AddWakeOnLanModal from "./AddWakeOnLanModal.tsx";
 import Container from "../base/Container.tsx";
 import ContainerHeader from "../base/ContainerHeader.tsx";
+import {WakeOnLanPC} from "../../feature/component/device.ts";
 
 const WakeOnLanList: React.FC = () => {
     const {jwtFetch} = useAuth();
@@ -17,13 +18,13 @@ const WakeOnLanList: React.FC = () => {
     const [allChecked, setAllChecked] = useState(false);
     const [checkedRows, setCheckedRows] = useState<boolean[]>([]);
 
-    const setWolList = (value: JSONData) => dispatch({wolList: value});
+    const setWolList = (value: WakeOnLanPC[]) => dispatch({wolList: value});
 
     // 전체 체크박스 상태 변경
     const handleAllCheckedChange = () => {
         const newCheckedState = !allChecked;
         setAllChecked(newCheckedState);
-        setCheckedRows(new Array(state.wolList.length).fill(newCheckedState));
+        setCheckedRows(new Array((state.wolList ?? []).length).fill(newCheckedState));
     };
 
     // 개별 체크박스 상태 변경
@@ -67,10 +68,12 @@ const WakeOnLanList: React.FC = () => {
         })
             .then(async res => {
                 if(res.ok){
-                    const wolList: any[] = state.wolList || [];
+                    const wolList = state.wolList || [];
                     const list = [...wolList];
                     list.push(await res.json());
                     setWolList(list);
+                }else{
+                    toastError('WOL 추가에 실패했습니다.');
                 }
             })
             .then(() => showModal(false))
@@ -78,7 +81,7 @@ const WakeOnLanList: React.FC = () => {
     }
 
     const removeWakeOnLanData = async () => {
-        let wolList: any[] = state.wolList || [];
+        let wolList = state.wolList ?? [];
         wolList = wolList.filter((_, index) => checkedRows[index]);
 
         if(wolList.length < 1){
@@ -86,7 +89,20 @@ const WakeOnLanList: React.FC = () => {
             return;
         }
         if(confirm('선택한 항목을 정말로 제거하시겠습니까?')){
-            toastInfo('제거에 실패했습니다.');
+            jwtFetch('/api/wol', {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({idList: wolList.map(v => v.id)}),
+            })
+                .then(async res => {
+                    if(res.ok){
+                        const beforeList = state.wolList ?? [];
+                        setWolList(beforeList.filter((pc) => !wolList.some((item) => item.id === pc.id)));
+                    }else{
+                        toastError('WOL 제거에 실패했습니다.')
+                    }
+                })
+                .catch((error) => toastError(error));
         }
     }
 
@@ -95,7 +111,6 @@ const WakeOnLanList: React.FC = () => {
         <AddWakeOnLanModal visibility={modal} setVisibility={showModal} onSubmit={addWakeOnLanData}/>
         <Container>
             <ContainerHeader title="LAN으로 깨우기">
-                {/*<div className="wol-add ms-auto me-2" >+</div>*/}
                 <OverlayTrigger overlay={<Tooltip>추가</Tooltip>} placement="top">
                     <span className="ms-auto" onClick={() => showModal(true)}>
                         <BiPlus className="wol-header-button"/>

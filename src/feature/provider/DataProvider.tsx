@@ -1,11 +1,12 @@
 import React, {createContext, useReducer, useContext, ReactNode, Dispatch} from 'react';
-import {SwitchBotDevice, CheckerDevice} from "../component/device.ts";
+import {SwitchBotDevice, CheckerDevice, WakeOnLanPC} from "../component/device.ts";
 
 export interface AppState{
     humidity?: number;
     temperature?: number;
     checkerList?: CheckerDevice[];
     switchBotList?: SwitchBotDevice[];
+    wolList?: WakeOnLanPC[];
     [key: string]: any;
 }
 

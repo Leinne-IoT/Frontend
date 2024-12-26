@@ -22,3 +22,10 @@ export interface SwitchBotHistoryRow extends Device{
     battery: number;
     recordDate: Date;
 }
+
+export interface WakeOnLanPC{
+    id: number;
+    name: string;
+    address: string;
+    connected: boolean;
+}
