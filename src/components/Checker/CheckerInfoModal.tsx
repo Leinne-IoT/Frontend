@@ -22,7 +22,6 @@ export const CheckerInfoModal: React.FC<Props> = ({visibility, setVisibility, de
             const res = await jwtFetch(`/checker/history?device_id=${device.id}&page=${page}`);
             const list = [];
             const jsonData = await res.json();
-            console.log(jsonData);
             setTotalPages(Math.min(10, jsonData.totalPages));
             for(const index in jsonData.data){
                 const history = jsonData.data[index];

@@ -23,7 +23,6 @@ export const SwitchBotInfoModal: React.FC<Props> = ({visibility, setVisibility, 
             const res = await jwtFetch(`/switch_bot/history?device_id=${device.id}&page=${page}`);
             const list = [];
             const jsonData = await res.json();
-            console.log(jsonData);
             setTotalPages(Math.min(10, jsonData.totalPages));
             for(const index in jsonData.data){
                 const history = jsonData.data[index];
