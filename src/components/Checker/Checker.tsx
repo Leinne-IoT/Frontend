@@ -10,23 +10,13 @@ interface Props {
 
 const Checker: React.FC<Props> = ({device}) => {
     const [modal, setModal] = useState(false);
-
-    let battery = device.battery + '';
-    if(!battery){
-        battery = '전원';
-    }else{
-        battery += '%';
-    }
-
-    const onClick = () => setModal(true);
-
     return <>
         {!device.number && <CheckerInfoModal visibility={modal} setVisibility={setModal} device={device}/>}
-        <tr className={device.number ? "" : "checker"} onClick={device.number ? undefined : onClick}>
+        <tr className={device.number ? "" : "checker"} onClick={device.number ? undefined : () => setModal(true)}>
             {device.number && <td className="text-center">{device.number}</td>}
             <td className="text-center">{device.name}</td>
             <td className="text-center">{device.open ? '열림' : '닫힘'}</td>
-            <td className="text-center">{battery}</td>
+            <td className="text-center">{device.battery == null ? '전원' : `${device.battery}%`}</td>
             <td className="text-center">{dateToString(device.recordDate || new Date(), true)}</td>
         </tr>
     </>;
