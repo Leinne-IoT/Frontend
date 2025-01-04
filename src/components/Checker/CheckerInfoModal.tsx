@@ -13,19 +13,20 @@ interface Props{
 
 export const CheckerInfoModal: React.FC<Props> = ({visibility, setVisibility, device}) => {
     const {jwtFetch} = useAuth();
+    const [size, setSize] = useState(20);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [checkerHistory, setCheckerHistory] = useState<CheckerDevice[]>([]);
 
     const updateHistory = async () => {
         try{
-            const res = await jwtFetch(`/checker/history?device_id=${device.id}&page=${page}`);
+            const res = await jwtFetch(`/checker/history?device_id=${device.id}&page=${page}&size=${size}`);
             const list = [];
             const jsonData = await res.json();
             setTotalPages(Math.min(10, jsonData.totalPages));
             for(const index in jsonData.data){
                 const history = jsonData.data[index];
-                history.number = +index + 1 + (page - 1) * 10;
+                history.number = +index + 1 + (page - 1) * size;
                 list.push(history);
             }
             setCheckerHistory(list)

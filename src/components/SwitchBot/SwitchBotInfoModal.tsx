@@ -13,20 +13,20 @@ interface Props{
 
 export const SwitchBotInfoModal: React.FC<Props> = ({visibility, setVisibility, device}) => {
     const {jwtFetch} = useAuth();
+    const [size, setSize] = useState(20);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [switchBotHistory, setSwitchBotHistory] = useState<SwitchBotHistoryRow[]>([]);
 
     const updateHistory = async () => {
         try{
-            // TODO: 히스토리 업데이트 방식 개선 예정
-            const res = await jwtFetch(`/switch_bot/history?device_id=${device.id}&page=${page}`);
+            const res = await jwtFetch(`/switch_bot/history?device_id=${device.id}&page=${page}&size=${size}`);
             const list = [];
             const jsonData = await res.json();
             setTotalPages(Math.min(10, jsonData.totalPages));
             for(const index in jsonData.data){
                 const history = jsonData.data[index];
-                history.number = +index + 1 + (page - 1) * 10;
+                history.number = +index + 1 + (page - 1) * size;
                 list.push(history);
             }
             setSwitchBotHistory(list)
