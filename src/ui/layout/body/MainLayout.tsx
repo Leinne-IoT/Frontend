@@ -19,7 +19,7 @@ const COMPONENT_WIDTH = 410; // 400px + 10px padding
 const MainLayout: FC<Props> = ({routeList, children}) => {
     const {width, ref} = useResizeDetector();
     const [sidebar, setSidebar] = useState(false);
-    const [expanded, setExpanded] = useState(true);
+    const [expanded, setExpanded] = useState(false);
 
     useEffect(() => {
         const adjustedWidth = Math.max((width ?? 0) - PADDING, 0);
