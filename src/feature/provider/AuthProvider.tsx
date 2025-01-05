@@ -1,6 +1,7 @@
 import {FC, createContext, useRef, useState, useContext, useEffect, ReactNode, Dispatch, SetStateAction} from 'react';
 import {isArray, isNumeric, isObject, tryParseJson} from '../../utils/utils.ts';
-import {AppState, useData} from './DataProvider.tsx';
+import {useData} from './DataProvider.tsx';
+import {Device} from "../component/device.ts";
 
 export enum AuthStatus{
     NONE = -2,      // 미설정
@@ -80,55 +81,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({children}) => {
             webSocket.addEventListener('open', () => webSocket.send(JSON.stringify({method: 'JOIN_CLIENT'})));
             webSocket.addEventListener('message', (event) => {
                 const data = tryParseJson(event.data);
-                const dispatchData: AppState = {};
-                if(isArray(data.checkerList)){
-                    dispatchData.checkerList = data.checkerList;
-                }
-                if(isArray(data.switchBotList)){
-                    dispatchData.switchBotList = data.switchBotList;
-                }
-                if(isNumeric(data.humidity)){
-                    dispatchData.humidity = Math.max(data.humidity, 0);
-                }
-                if(isNumeric(data.temperature)){
-                    dispatchData.temperature = Math.max(data.temperature, 0);
-                }
-                dispatch(dispatchData)
-
-                if(isObject(data.device)){
-                    dispatch(before => {
-                        const list = before.switchBotList || [];
-                        const id = list.findIndex((switchBot) => switchBot.id === data.device.id);
-                        if(id > -1){
-                            list[id] = {...list[id], ...data.switchBot};
-                        }
-                        return {switchBotList: list};
-                    });
-                }
-                if(isObject(data.checker)){
-                    dispatch(before => {
-                        const list = before.checkerList || [];
-                        const id = list.findIndex((checker) => checker.id === data.checker.id);
-                        if(id < 0){
-                            list.push(data.checker);
-                        }else{
-                            list[id] = {...list[id], ...data.checker};
-                        }
-                        return {checkerList: list};
-                    });
-                }
-                if(isObject(data.switchBot)){
-                    dispatch(before => {
-                        const list = before.switchBotList || [];
-                        const id = list.findIndex((switchBot) => switchBot.id === data.switchBot.id);
-                        if(id < 0){
-                            list.push(data.switchBot);
-                        }else{
-                            list[id] = {...list[id], ...data.switchBot};
-                        }
-                        return {switchBotList: list};
-                    });
-                }
+                dispatch(before => {
+                    const seen = new Set<string>();
+                    const deviceList = (isArray(data.deviceList) ? data.deviceList : [...before.deviceList]) as Device[];
+                    if(isObject(data.device)){
+                        deviceList.unshift(data.device);
+                    }
+                    return {deviceList: deviceList.filter(device => !seen.has(device.id) && !!seen.add(device.id))};
+                });
             });
             webSocket.addEventListener('close', event => {
                 if(event.code === 1003){

@@ -5,10 +5,11 @@ import Container from "../base/Container.tsx";
 import ContainerHeader from "../base/ContainerHeader.tsx";
 import {useData} from "../../feature/provider/DataProvider.tsx";
 import {toastInfo} from "../../feature/utils/toast.tsx";
+import {DeviceType, SwitchBotDevice} from "../../feature/component/device.ts";
 
 const SwitchBotList: React.FC = () => {
-    const {state} = useData();
-    const switchBotList = state.switchBotList || [];
+    const {state: {deviceList}} = useData();
+    const switchBotList = deviceList.filter(device => device.model == DeviceType.SWITCH_BOT) as SwitchBotDevice[];
     return <>
         <Container>
             <ContainerHeader title="방 전등">

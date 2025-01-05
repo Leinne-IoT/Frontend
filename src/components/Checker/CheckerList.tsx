@@ -6,10 +6,11 @@ import {useData} from "../../feature/provider/DataProvider.tsx";
 import {toastInfo} from "../../feature/utils/toast.tsx";
 import Container from "../base/Container.tsx";
 import ContainerHeader from "../base/ContainerHeader.tsx";
+import {CheckerDevice, DeviceType} from "../../feature/component/device.ts";
 
 const CheckerList = () => {
-    const {state: {checkerList}} = useData();
-    const list: any[] = checkerList || [];
+    const {state: {deviceList}} = useData();
+    const checkerList = deviceList.filter(device => device.model == DeviceType.CHECKER) as CheckerDevice[];
     return <>
         <Container>
             <ContainerHeader title="문/창문 상태">
@@ -28,7 +29,7 @@ const CheckerList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {list.map((device, index) => <Checker key={index} device={device}/>)}
+                    {checkerList.map((device, index) => <Checker key={index} device={device}/>)}
                 </tbody>
             </Table>
         </Container>

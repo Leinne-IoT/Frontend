@@ -6,12 +6,12 @@ import {Button, Dropdown} from "react-bootstrap";
 import RemoteBase from "../base/RemoteBase.tsx";
 import {BsArrowDown, BsArrowUp} from "react-icons/bs";
 import {isNumeric, JSONData} from "../../../utils/utils.ts";
-import {useData} from "../../../feature/provider/DataProvider.tsx";
 import {useAuth} from "../../../feature/provider/AuthProvider.tsx";
 import {useStorageState} from "../../../ui/utils/LocalStorage.tsx";
 import {toastError} from "../../../feature/utils/toast.tsx";
 import ACTimerModal from "./ACTimerModal.tsx";
 import {ACReservationModal} from "./ACReservationModal/ACReservationModal.tsx";
+import {RemoteBotDevice} from "../../../feature/component/device.ts";
 
 interface SensorProps{
     humidity: any;
@@ -36,8 +36,11 @@ const Sensor: React.FC<SensorProps> = ({temperature, humidity}) => {
     )
 }
 
-const AirConditioner: React.FC = () => {
-    const {state} = useData();
+interface Props{
+    device: RemoteBotDevice;
+}
+
+const AirConditioner: React.FC<Props> = ({device}) => {
     const {jwtFetch} = useAuth();
 
     const [timerModal, setTimerModal] = useState(false);
@@ -80,7 +83,7 @@ const AirConditioner: React.FC = () => {
         <ACTimerModal visibility={timerModal} setVisibility={setTimerModal}/>
         <ACReservationModal visibility={reservationModal} setVisibility={setReservationModal}/>
         <div className="d-flex gap-3" style={{minHeight: '176px', maxHeight: '200px'}}>
-            {<Sensor temperature={state.temperature} humidity={state.humidity}/>}
+            {<Sensor temperature={device.temperature} humidity={device.humidity}/>}
             <div className="d-flex flex-column justify-content-between align-items-center" style={{flex: '13'}}>
                 <img src={AirConditionerIcon} alt="에어컨" className="mt-3" style={{maxWidth: '44%'}}/>
                 <div className="d-flex align-items-center" style={{fontSize: "1.6rem"}}>
