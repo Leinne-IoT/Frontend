@@ -1,5 +1,5 @@
 import {FC, createContext, useRef, useState, useContext, useEffect, ReactNode, Dispatch, SetStateAction} from 'react';
-import {isArray, isNumeric, isObject, tryParseJson} from '../../utils/utils.ts';
+import {isArray, isObject, tryParseJson} from '../../utils/utils.ts';
 import {useData} from './DataProvider.tsx';
 import {Device} from "../component/device.ts";
 
