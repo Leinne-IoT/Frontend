@@ -18,13 +18,13 @@ const WakeOnLanList: React.FC = () => {
     const [allChecked, setAllChecked] = useState(false);
     const [checkedRows, setCheckedRows] = useState<boolean[]>([]);
 
-    const setWolList = (value: WakeOnLanPC[]) => dispatch({wolList: value});
+    const setWakeOnLanPcList = (value: WakeOnLanPC[]) => dispatch({wakeOnLanPcList: value});
 
     // 전체 체크박스 상태 변경
     const handleAllCheckedChange = () => {
         const newCheckedState = !allChecked;
         setAllChecked(newCheckedState);
-        setCheckedRows(new Array((state.wolList ?? []).length).fill(newCheckedState));
+        setCheckedRows(new Array((state.wakeOnLanPcList ?? []).length).fill(newCheckedState));
     };
 
     // 개별 체크박스 상태 변경
@@ -38,27 +38,27 @@ const WakeOnLanList: React.FC = () => {
     };
 
     useEffect(() => {
-        if(!isArray(state.wolList)){
-            state.wolList = [];
+        if(!isArray(state.wakeOnLanPcList)){
+            state.wakeOnLanPcList = [];
             jwtFetch(`/data/wol`, {method: 'POST'})
-                .then(async res => setWolList(await res.json()))
+                .then(async res => setWakeOnLanPcList(await res.json()))
                 .catch(error => {
                     console.error(error)
-                    dispatch({wolList: undefined});
+                    dispatch({wakeOnLanPcList: undefined});
                 });
         }
     }, []);
 
     useEffect(() => {
-        const wolList: any[] = state.wolList || [];
-        if(checkedRows.length < wolList.length){
+        const wakeOnLanPcList: any[] = state.wakeOnLanPcList || [];
+        if(checkedRows.length < wakeOnLanPcList.length){
             const newRows = [...checkedRows];
-            for(let i = 0, limit = wolList.length - checkedRows.length; i < limit; ++i){
+            for(let i = 0, limit = wakeOnLanPcList.length - checkedRows.length; i < limit; ++i){
                 newRows.push(false);
             }
             setCheckedRows(newRows);
         }
-    }, [checkedRows, state.wolList]);
+    }, [checkedRows, state.wakeOnLanPcList]);
 
     const addWakeOnLanData = (name: string, address: string) => {
         jwtFetch('/api/wol', {
@@ -68,10 +68,10 @@ const WakeOnLanList: React.FC = () => {
         })
             .then(async res => {
                 if(res.ok){
-                    const wolList = state.wolList || [];
-                    const list = [...wolList];
+                    const wakeOnLanPcList = state.wakeOnLanPcList ?? [];
+                    const list = [...wakeOnLanPcList];
                     list.push(await res.json());
-                    setWolList(list);
+                    setWakeOnLanPcList(list);
                 }else{
                     toastError('WOL 추가에 실패했습니다.');
                 }
@@ -81,10 +81,10 @@ const WakeOnLanList: React.FC = () => {
     }
 
     const removeWakeOnLanData = async () => {
-        let wolList = state.wolList ?? [];
-        wolList = wolList.filter((_, index) => checkedRows[index]);
+        let wakeOnLanPcList = state.wakeOnLanPcList ?? [];
+        wakeOnLanPcList = wakeOnLanPcList.filter((_, index) => checkedRows[index]);
 
-        if(wolList.length < 1){
+        if(wakeOnLanPcList.length < 1){
             toastError('제거할 항목을 선택해주세요.')
             return;
         }
@@ -92,12 +92,12 @@ const WakeOnLanList: React.FC = () => {
             jwtFetch('/api/wol', {
                 method: 'DELETE',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({idList: wolList.map(v => v.id)}),
+                body: JSON.stringify({idList: wakeOnLanPcList.map(v => v.id)}),
             })
                 .then(async res => {
                     if(res.ok){
-                        const beforeList = state.wolList ?? [];
-                        setWolList(beforeList.filter((pc) => !wolList.some((item) => item.id === pc.id)));
+                        const beforeList = state.wakeOnLanPcList ?? [];
+                        setWakeOnLanPcList(beforeList.filter((pc) => !wakeOnLanPcList.some((item) => item.id === pc.id)));
                     }else{
                         toastError('WOL 제거에 실패했습니다.')
                     }
@@ -106,7 +106,7 @@ const WakeOnLanList: React.FC = () => {
         }
     }
 
-    const wolList: any[] = state.wolList || [];
+    const wakeOnLanPcList = state.wakeOnLanPcList || [];
     return <>
         <AddWakeOnLanModal visibility={modal} setVisibility={showModal} onSubmit={addWakeOnLanData}/>
         <Container>
@@ -137,7 +137,7 @@ const WakeOnLanList: React.FC = () => {
                 </tr>
                 </thead>
                 <tbody>
-                    {wolList.map((data, index) => <WakeOnLan
+                    {wakeOnLanPcList.map((data, index) => <WakeOnLan
                         key={data.id}
                         pcData={data}
                         checked={checkedRows[index] || false}
