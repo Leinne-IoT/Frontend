@@ -35,11 +35,14 @@ const App: FC = () => {
 
             try{
                 const registration = await navigator.serviceWorker.register('./js/worker.js');
-                const subscription = await registration.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: urlBase64ToUint8Array(await (await jwtFetch('/notify/get-key')).text()),
-                });
-                jwtFetch('/notify/subscribe', {
+                let subscription = await registration.pushManager.getSubscription(); // 기존 구독 정보 확인
+                if(!subscription){
+                    const keyRes = await jwtFetch('/notify/get-key');
+                    const key = await keyRes.text();
+                    const applicationServerKey = urlBase64ToUint8Array(key);
+                    subscription = await registration.pushManager.subscribe({userVisibleOnly: true, applicationServerKey});
+                }
+                await jwtFetch('/notify/subscribe', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(subscription),
@@ -48,11 +51,19 @@ const App: FC = () => {
                 console.error(e);
             }
         }
-        if(window.Notification && Notification.permission !== 'granted'){
+
+        const checkAndRegister = async () => {
+            if(!window.Notification){
+                return;
+            }
+
             Notification.requestPermission()
                 .then(permission => registerWebPush(permission))
                 .catch(e => alert(e));
-        }
+        };
+        checkAndRegister().then();
+        navigator.permissions.query({name: 'notifications'}) // 알림 활성화 감지 (권한 상태 변경 시 다시 확인)
+            .then(permissionStatus => permissionStatus.onchange = checkAndRegister);
     }, []);
 
     if(authStatus <= AuthStatus.VERIFYING){
