@@ -1,16 +1,14 @@
 import React, {createContext, useReducer, useContext, ReactNode, Dispatch} from 'react';
-import {SwitchBotDevice, CheckerDevice, WakeOnLanPC} from "../component/device.ts";
+import {WakeOnLanPC, Device} from "../component/device.ts";
+import {isArray, isObject} from "../../utils/utils.ts";
 
 export interface AppState{
-    humidity?: number;
-    temperature?: number;
-    checkerList?: CheckerDevice[];
-    switchBotList?: SwitchBotDevice[];
-    wolList?: WakeOnLanPC[];
+    deviceList: Device[];
+    wakeOnLanPcList?: WakeOnLanPC[];
     [key: string]: any;
 }
 
-type ActionData = AppState | ((state: AppState) => AppState);
+type ActionData = Record<string, any> | ((state: AppState) => Record<string, any>);
 interface DataContextProps{
     state: AppState;
     dispatch: Dispatch<ActionData>;
@@ -27,11 +25,15 @@ export const useData = (): DataContextProps => {
 const DataContext = createContext<DataContextProps | undefined>(undefined);
 
 const dataReducer = (state: AppState, action: ActionData): AppState => {
-    if(typeof action === 'function'){
-        const newValue = action(state);
+    const newValue = typeof action === 'function' ? action(state) : action;
+    if(
+        isObject(newValue) &&
+        (newValue.deviceList == null || isArray(newValue.deviceList)) &&
+        (newValue.wakeOnLanPcList == null || isArray(newValue.wakeOnLanPcList))
+    ){
         return {...state, ...newValue};
     }
-    return {...state, ...action};
+    return state;
 }
 
 interface DataProviderProps {
@@ -39,7 +41,7 @@ interface DataProviderProps {
 }
 
 export const DataProvider: React.FC<DataProviderProps> = ({children}) => {
-    const [state, dispatch] = useReducer(dataReducer, {});
+    const [state, dispatch] = useReducer(dataReducer, {deviceList: []});
     return (
         <DataContext.Provider value={{state, dispatch}}>
             {children}
